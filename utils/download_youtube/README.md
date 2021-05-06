@@ -13,14 +13,20 @@ python video_labeling.py --video_list_path {} --video_path {} --label_path {}
 
 ### 주의사항
 다운로드 및 스크립트 추출을 하고자 하는 유튜브 영상 링크는 video_list.txt파일에 명시하면 되나 아래와 같은 형식을 따를 것.<br>
-\<그룹명\>
-유튜브 영상 링크
+
 
 ```bash
-KBS뉴스
-https://youtube.com/xxxxxx
-https://youtube.com/xxxxxy
-SBS뉴스
-https://youtube.com/xxxxyy
-https://youtube.com/xxxxzz
+<그룹명>
+유튜브 영상 링크
+<그룹명>
+유튜브 영상 링크
+...
+
+example:
+  KBS뉴스
+  https://youtube.com/xxxxxx
+  https://youtube.com/xxxxxy
+  SBS뉴스
+  https://youtube.com/xxxxyy
+  https://youtube.com/xxxxzz
 ```
