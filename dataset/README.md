@@ -9,9 +9,9 @@ youtube_dataset: 다운로드한 유튜브 mp4 파일 및 Pororo를 사용한 �
 ```bash
 └── dataset
     ├── article_dataset
-    |     └── train.jsonl
+    │     └── train.jsonl
     ├── subtext_datset
-    |     └── **.pt
+    │     └── xxx.pt
     └── youtube_datset
           ├── label
           └── video
