@@ -17,6 +17,7 @@ import argparse
 from models.data_loader import TextLoader, load_dataset
 from src.backbone import ExtTransformerEncoder, ExtSummarizer, WindowEmbedder
 
+from utils.load_bertsum import bertsum
 
 
 def get_args(parser):
@@ -67,18 +68,18 @@ def load_article(dataset_base_pth=''):
     return news_clean
             
 
-def load_bertsum(configs):
-    # Settings
-    device = "cpu" if configs.visible_gpus == -1 else "cuda"
-    loader = TextLoader(configs, device)
+# def bertsum_model(configs):
+#     # Settings
+#     device = "cpu" if configs.visible_gpus == -1 else "cuda"
+#     loader = TextLoader(configs, device)
 
-    # model setting
-    ckpt_path = '/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt'
-    checkpoint = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
-    model = ExtSummarizer(configs, device, checkpoint)
-    model.eval()
+#     # model setting
+#     ckpt_path = '/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt'
+#     checkpoint = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
+#     model = ExtSummarizer(configs, device, checkpoint)
+#     model.eval()
     
-    return model, loader
+#     return model, loader
 
 
 def save_data(args, file):
@@ -220,7 +221,7 @@ def main():
     #configs = yaml_to_args(YAML_CONFIGS)
     
     # Load bertsum model and embedder
-    bertsum_model, loader = load_bertsum(args)
+    bertsum_model, loader = bertsum(args)
     bert_embedder = WindowEmbedder(model=bertsum_model, text_loader=loader)
     
     # Load article dataset
