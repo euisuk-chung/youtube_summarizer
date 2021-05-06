@@ -148,8 +148,8 @@ def evaluate(input_model, test_loader):
         
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", default="/home/sks/korea_univ/21_1/TA/project/video_summarizer/Youtube-Summarizer/src/subtext/dataset/nn_dataset.pkl", type=str)
-    parser.add_argument("--save_path", default="/home/sks/korea_univ/21_1/TA/project/video_summarizer/Youtube-Summarizer/src/subtext/chunk_nn/ckpt/chunk_model_ckpt.pt")
+    parser.add_argument("--data_path", default="/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/subtext_dataset/nn_dataset_w3.pkl", type=str)
+    parser.add_argument("--save_path", default="./ckpt/")
 
     args = parser.parse_args()
     
