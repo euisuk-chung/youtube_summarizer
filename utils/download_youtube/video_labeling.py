@@ -7,8 +7,8 @@ from clovaspeech_script import ClovaSpeechClient
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--video_list_path', default = './video_list.txt')
-    parser.add_argument('--video_path', default='./data/video')
-    parser.add_argument('--label_path', default='./data/label')
+    parser.add_argument('--video_path', default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/youtube_dataset/video')
+    parser.add_argument('--label_path', default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/youtube_dataset/label')
     
     args = parser.parse_args()
     
