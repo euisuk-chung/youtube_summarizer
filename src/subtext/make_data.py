@@ -19,16 +19,6 @@ from src.backbone import ExtTransformerEncoder, ExtSummarizer, WindowEmbedder
 
 
 
-def yaml_to_args(yaml_file):
-    tmp_parser = argparse.ArgumentParser()
-    config_file = tmp_parser.parse_args()
-    config_dict = config_file.__dict__
-    
-    for key, value in yaml_file.items():
-        config_dict[key] = value 
-
-    return config_file
-
 def get_args(parser):
     return parser.parse_args()
 
@@ -209,7 +199,6 @@ class DataGenerator:
 
 
 def create_parser():
-    
     parser = argparse.ArgumentParser()
     
     parser.add_argument("--dataset_base_pth", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset', type=str)
@@ -217,13 +206,11 @@ def create_parser():
     parser.add_argument("--window_size", default=4, type=int)
     parser.add_argument("--dataset_size", default=50000, type=int)
     parser.add_argument("--random_point", action='store_true', help='data shape for methods')
-    args = parser.parse_args()
-    
+
     return parser
     
                     
 def main():
-    
     # logger
     logger = logging.getLogger(__name__)
     logging.basicConfig(format="%(asctime)s [%(levelname)s] %(message)s", 
@@ -234,16 +221,15 @@ def main():
                         ])
     
     args = parse_args(create_parser())
-    
-    
+    logging.info(vars(args))
     
     logging.info(f"Generate using random points: {args.random_point}")
     
-    YAML_CONFIGS = load_config(config_path=args.config_path)
-    configs = yaml_to_args(YAML_CONFIGS)
+    #YAML_CONFIGS = load_config(config_path=args.config_path)
+    #configs = yaml_to_args(YAML_CONFIGS)
     
     # Load bertsum model and embedder
-    bertsum_model, loader = load_bertsum(configs)
+    bertsum_model, loader = load_bertsum(args)
     bert_embedder = WindowEmbedder(model=bertsum_model, text_loader=loader)
     
     # Load article dataset
