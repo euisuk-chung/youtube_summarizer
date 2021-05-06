@@ -12,7 +12,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torch.utils.data as data_utils
 
-from model import ChunkClassifier
+from model.subtext_classifier import SubtextClassifier
 
 
 # Device Setting
@@ -160,12 +160,12 @@ def main():
     # Load data / model
     train_loader, val_loader, test_loader = load_dataset(data_pth)
     
-    chunk_model = ChunkClassifier(window_size=args.window_size)
+    subtext_model = SubtextClassifier(window_size=args.window_size)
     print(f"Device: {device}")
-    chunk_model.to(device)
+    subtext_model.to(device)
     
     # Train
-    model = trainer(chunk_model, train_loader, val_loader)
+    model = trainer(subtext_model, train_loader, val_loader)
     
     # Save
     random_flag = 'random' if args.random_point else 'fixed'
@@ -177,9 +177,6 @@ def main():
     model.eval()
     evaluate(model, test_loader)
 
-    
-    
-    
         
 if __name__=='__main__':
     main()
