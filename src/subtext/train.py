@@ -151,6 +151,7 @@ def main():
     parser.add_argument("--data_path", default="/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/subtext_dataset", type=str)
     parser.add_argument("--save_path", default="./ckpt")
     parser.add_argument("--window_size", default=4, type=int)
+    parser.add_argument("--random_point", action='store_true')
     args = parser.parse_args()
     
     data_pth = os.path.join(args.data_path, f'nn_dataset_w{args.window_size}.pkl')

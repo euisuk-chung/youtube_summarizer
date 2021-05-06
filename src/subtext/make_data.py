@@ -82,22 +82,13 @@ def load_bertsum(configs):
 
 
 def save_data(args, file):
+    random = 'random' if args.random_point else 'fixed'
+    save_path = os.path.join(args.dataset_base_pth, f'subtext_dataset/nn_dataset_w{args.window_size}_{random}.pkl')
     
-    idx = 0
-    save_path = os.path.join(args.dataset_base_pth, f'subtext_dataset/nn_dataset_w{args.window_size}_{idx}.pkl')
-    save_safe = not os.path.isfile(save_path)
-    
-    while True:
-        if save_safe:
-            with open(save_path, 'wb') as ww:
-                pickle.dump(file, ww)
-                print(f"Saving done at: {save_path}")
-                break
-        else:
-            idx += 1
-            save_path = os.path.join(args.dataset_base_pth, f'subtext_dataset/nn_dataset_w{args.window_size}_{idx}.pkl')
-            save_safe = not os.path.isfile(save_path)
-
+    with open(save_path, 'wb') as ww:
+        pickle.dump(file, ww)
+        print(f"Saving done at: {save_path}")
+        
     return
 
 
@@ -205,7 +196,7 @@ def create_parser():
     parser.add_argument("--config_path", default='./config.yml', type=str)
     parser.add_argument("--window_size", default=4, type=int)
     parser.add_argument("--dataset_size", default=50000, type=int)
-    parser.add_argument("--random_point", action='store_true', help='data shape for methods')
+    parser.add_argument("--random_point", action='store_true')
 
     return parser
     
