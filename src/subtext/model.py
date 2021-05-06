@@ -3,12 +3,14 @@ import torch.nn as nn
 
 class ChunkClassifier(nn.Module):
     
-    def __init__(self, x_features):
+    def __init__(self, window_size):
         super(ChunkClassifier, self).__init__()
+        
+        conv_kernel_size = window_size*2-2
         
         # block1
         self.block1 = nn.Sequential(
-            nn.Conv1d(in_channels=768, out_channels=128, kernel_size=6),
+            nn.Conv1d(in_channels=768, out_channels=128, kernel_size=conv_kernel_size),
             nn.BatchNorm1d(128),
             nn.ReLU()
         )

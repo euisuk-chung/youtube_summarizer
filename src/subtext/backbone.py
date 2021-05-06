@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import pyyaml
 import sys
-sys.path.append('/home/sks/korea_univ/21_1/TA/project/youtube_summarizer/Youtube-Summarizer/src/bertsum')
+sys.path.append('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum')
 
 from easydict import EasyDict
 from models.neural import MultiHeadedAttention, PositionwiseFeedForward

@@ -148,15 +148,18 @@ def evaluate(input_model, test_loader):
         
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", default="/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/subtext_dataset/nn_dataset_w3.pkl", type=str)
-    parser.add_argument("--save_path", default="./ckpt/")
-
+    parser.add_argument("--data_path", default="/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/subtext_dataset", type=str)
+    parser.add_argument("--save_path", default="./ckpt")
+    parser.add_argument("--window_size", default=4, type=int)
     args = parser.parse_args()
     
-    # Load data / model
-    train_loader, val_loader, test_loader = load_dataset(args.data_path)
+    data_pth = os.path.join(args.data_path, f'nn_dataset_w{args.window_size}.pkl')
+    assert os.path.isfile(data_pth), f"Dataset doesn't exists at: {data_pth}"
     
-    chunk_model = ChunkClassifier(x_features = 768)
+    # Load data / model
+    train_loader, val_loader, test_loader = load_dataset(data_pth)
+    
+    chunk_model = ChunkClassifier(window_size=args.window_size)
     print(f"Device: {device}")
     chunk_model.to(device)
     
@@ -164,15 +167,18 @@ def main():
     model = trainer(chunk_model, train_loader, val_loader)
     
     # Save
-    torch.save(model.state_dict(), args.save_path, _use_new_zipfile_serialization=False)
-    print(f"Model Saved at: {args.save_path}")
+    save_pth = os.path.join(args.save_path, f'subtext_model_w{args.window_size}.pt')
+    torch.save(model.state_dict(), save_pth, _use_new_zipfile_serialization=False)
+    print(f"Model Saved at: {save_pth}")
     
     # Test
     model.eval()
     evaluate(model, test_loader)
 
+    
+    
+    
         
 if __name__=='__main__':
-    
     main()
     
