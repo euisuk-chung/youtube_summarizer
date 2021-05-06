@@ -16,9 +16,9 @@ python video_labeling.py --video_list_path {} --video_path {} --label_path {}
 
 
 ```bash
-<그룹명>
+그룹명
 유튜브 영상 링크
-<그룹명>
+그룹명
 유튜브 영상 링크
 ...
 
