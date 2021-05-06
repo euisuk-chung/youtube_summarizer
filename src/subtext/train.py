@@ -168,7 +168,8 @@ def main():
     model = trainer(chunk_model, train_loader, val_loader)
     
     # Save
-    save_pth = os.path.join(args.save_path, f'subtext_model_w{args.window_size}.pt')
+    random_flag = 'random' if args.random_point else 'fixed'
+    save_pth = os.path.join(args.save_path, f'subtext_model_w{args.window_size}_{random_flag}.pt')
     torch.save(model.state_dict(), save_pth, _use_new_zipfile_serialization=False)
     print(f"Model Saved at: {save_pth}")
     

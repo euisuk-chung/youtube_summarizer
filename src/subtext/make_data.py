@@ -14,9 +14,7 @@ import yaml
 import argparse
 #print(torch.__version__)
 
-from models.data_loader import TextLoader, load_dataset
-from src.backbone import ExtTransformerEncoder, ExtSummarizer, WindowEmbedder
-
+from src.backbone import WindowEmbedder
 from utils.load_bertsum import bertsum
 
 
@@ -83,8 +81,8 @@ def load_article(dataset_base_pth=''):
 
 
 def save_data(args, file):
-    random = 'random' if args.random_point else 'fixed'
-    save_path = os.path.join(args.dataset_base_pth, f'subtext_dataset/nn_dataset_w{args.window_size}_{random}.pkl')
+    random_flag = 'random' if args.random_point else 'fixed'
+    save_path = os.path.join(args.dataset_base_pth, f'subtext_dataset/nn_dataset_w{args.window_size}_{random_flag}.pkl')
     
     with open(save_path, 'wb') as ww:
         pickle.dump(file, ww)
@@ -193,7 +191,7 @@ class DataGenerator:
 def create_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("--dataset_base_pth", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset', type=str)
+    parser.add_argument("--dataset_basedir", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset', type=str)
     parser.add_argument("--config_path", default='./config.yml', type=str)
     parser.add_argument("--window_size", default=4, type=int)
     parser.add_argument("--dataset_size", default=50000, type=int)
@@ -216,16 +214,13 @@ def main():
     logging.info(vars(args))
     
     logging.info(f"Generate using random points: {args.random_point}")
-    
-    #YAML_CONFIGS = load_config(config_path=args.config_path)
-    #configs = yaml_to_args(YAML_CONFIGS)
-    
+
     # Load bertsum model and embedder
     bertsum_model, loader = bertsum(args)
     bert_embedder = WindowEmbedder(model=bertsum_model, text_loader=loader)
     
     # Load article dataset
-    news_dataset = load_article(dataset_base_pth=args.dataset_base_pth)
+    news_dataset = load_article(dataset_base_pth=args.dataset_basedir)
     
     # Make tensor dataset used for training subtext_nn model
     data_generator = DataGenerator(max_num=args.dataset_size, news_dataset=news_dataset, window_size=args.window_size)
