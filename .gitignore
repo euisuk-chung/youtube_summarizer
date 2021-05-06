@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# Dataset Directory / checkpoint
+src/bertsum/checkpoint/*.pt
+dataset/*/*.jsonl
+dataset/*/*.pkl
+dataset/youtube_dataset/video/*.mp4
+
+
