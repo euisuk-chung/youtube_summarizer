@@ -12,6 +12,9 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torch.utils.data as data_utils
 
+print(torch.__version__)
+torch.backends.cudnn.enabled = False
+
 from model.subtext_classifier import SubtextClassifier
 
 
@@ -87,7 +90,7 @@ def trainer(input_model, *dataset):
 
             train_X, train_Y = train_block[0], train_block[1]
             optimizer.zero_grad()
-
+            
             # loss 계산
             train_pred = model(train_X)
             train_loss = crit(train_pred, train_Y)
@@ -171,7 +174,7 @@ def main():
     # Save
     random_flag = 'random' if args.random_point else 'fixed'
     save_pth = os.path.join(args.save_path, f'subtext_model_w{args.window_size}_{random_flag}.pt')
-    torch.save(model.state_dict(), save_pth, _use_new_zipfile_serialization=False)
+    torch.save(model.state_dict(), save_pth)
     print(f"Model Saved at: {save_pth}")
     
     # Test
