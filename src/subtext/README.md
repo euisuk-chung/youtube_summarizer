@@ -4,7 +4,7 @@
 ```bash
 '''
 Arguments
-    dataset_base_pth: 데이터셋을 모아놓는 베이스 디렉토리 (default: path/to/your/repository/dataset)
+    dataset_basedir: 데이터셋을 모아놓는 베이스 디렉토리 (default: path/to/your/repository/dataset)
     config_path: BertSum argument 파일 (config.yaml 파일 위치, default: ./config.yaml)
     window_size: 윈도우 크기 (default: 4)
     dataset_size: 데이터 크기 (default: 50000)
@@ -13,7 +13,7 @@ Arguments
                   (default: False)
 '''
 python make_data.py \
-    --dataset_base_pth {} \
+    --dataset_basedir {} \
     --config_path {} \
     --window_size {} \
     --dataset_size {} \
