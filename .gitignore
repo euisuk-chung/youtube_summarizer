@@ -135,6 +135,4 @@ dataset/*/*.jsonl
 dataset/*/*.pkl
 dataset/youtube_dataset/video/*.mp4
 
-src/subtext/src/
-
 
