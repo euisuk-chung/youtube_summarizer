@@ -154,7 +154,8 @@ def main():
     parser.add_argument("--random_point", action='store_true')
     args = parser.parse_args()
     
-    data_pth = os.path.join(args.data_path, f'nn_dataset_w{args.window_size}.pkl')
+    random_flag = 'random' if args.random_point else 'fixed'
+    data_pth = os.path.join(args.data_path, f'nn_dataset_w{args.window_size}_{random_flag}.pkl')
     assert os.path.isfile(data_pth), f"Dataset doesn't exists at: {data_pth}"
     
     # Load data / model
