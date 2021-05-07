@@ -12,6 +12,8 @@ import argparse
 import torch
 import re 
 
+print(torch.__version__)
+
 from utils.load_bertsum import bertsum
 from src.backbone import WindowEmbedder
 from model.subtext_classifier import SubtextClassifier
