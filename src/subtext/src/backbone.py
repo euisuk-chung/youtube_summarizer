@@ -3,7 +3,8 @@ import math
 import torch
 import torch.nn as nn
 import sys
-sys.path.append('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum')
+sys.path.append('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum') #규성
+sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/bertsum') #의석
 
 from easydict import EasyDict
 from models.neural import MultiHeadedAttention, PositionwiseFeedForward
@@ -11,6 +12,48 @@ from models.model_builder import Bert
 from models.encoder import Classifier, PositionalEncoding, TransformerEncoderLayer, ExtTransformerEncoder
 from models.trainer_ext import Trainer
 from models.data_loader import TextLoader, load_dataset, Dataloader, get_kobert_vocab
+
+args = EasyDict({
+    "visible_gpus" : -1,
+    "temp_dir" : './tmp/',
+    "test_from": None,
+    "max_pos" : 512,
+    "large" : False,
+    "finetune_bert": True,
+    "encoder": "bert",
+    "share_emb": False,
+    "dec_layers": 6,
+    "dec_dropout": 0.2,
+    "dec_hidden_size": 768,
+    "dec_heads": 8,
+    "dec_ff_size": 2048,
+    "enc_hidden_size": 512,
+    "enc_ff_size": 512,
+    "enc_dropout": 0.2,
+    "enc_layers": 6,
+    
+    "ext_dropout": 0.2,
+    "ext_layers": 2,
+    "ext_hidden_size": 768,
+    "ext_heads": 8,
+    "ext_ff_size": 2048,
+    
+    "accum_count": 1,
+    "save_checkpoint_steps": 5,
+    
+    "generator_shard_size": 32,
+    "alpha": 0.6,
+    "beam_size": 5,
+    "min_length": 15,
+    "max_length": 150,
+    "max_tgt_len": 140,  
+    "block_trigram": True,
+    
+    "model_path": "./tmp_model/",
+    "result_path": "./tmp_result/src",
+    "recall_eval": False,
+    "report_every": 1,
+})
 
 
 class ExtTransformerEncoder(nn.Module):

@@ -135,4 +135,5 @@ dataset/*/*.jsonl
 dataset/*/*.pkl
 dataset/youtube_dataset/video/*.mp4
 
-
+# tmp files
+jupyter/tmp/*
