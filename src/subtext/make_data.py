@@ -82,7 +82,7 @@ def load_article(dataset_base_pth=''):
 
 def save_data(args, file):
     random_flag = 'random' if args.random_point else 'fixed'
-    save_path = os.path.join(args.dataset_base_pth, f'subtext_dataset/nn_dataset_w{args.window_size}_{random_flag}.pkl')
+    save_path = os.path.join(args.dataset_basedir, f'subtext_dataset/nn_dataset_w{args.window_size}_{random_flag}.pkl')
     
     with open(save_path, 'wb') as ww:
         pickle.dump(file, ww)
