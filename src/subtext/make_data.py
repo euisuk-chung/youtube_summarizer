@@ -228,7 +228,11 @@ def main():
     news_dataset = load_article(dataset_base_pth=args.dataset_basedir)
     
     # Make tensor dataset used for training subtext_nn model
-    data_generator = DataGenerator(max_num=args.dataset_size, news_dataset=news_dataset, window_size=args.window_size)
+    data_generator = DataGenerator(max_num=args.dataset_size,
+                                   news_dataset=news_dataset,
+                                   window_size=args.window_size,
+                                   random_point=args.random_point)
+    
     tensor_dataset = data_generator.make_tensor(embedder=bert_embedder)
     
     # Save tensor dataset into .pkl file at given directory
