@@ -59,7 +59,7 @@ def load_dataset(path):
 
 
 
-def trainer(input_model, *dataset):
+def trainer(input_model, epochs, *dataset):
     
     model = input_model
     
@@ -81,7 +81,7 @@ def trainer(input_model, *dataset):
     train_tot_num = train_loader.dataset.__len__()
     val_tot_num = val_loader.dataset.__len__()
 
-    epochs = 10
+    epochs = epochs
     for epoch in range(epochs):
 
         train_loss_sum = 0.0
@@ -155,6 +155,8 @@ def main():
     parser.add_argument("--save_path", default="./ckpt")
     parser.add_argument("--window_size", default=4, type=int)
     parser.add_argument("--random_point", action='store_true')
+    parser.add_argument("--epochs", default=10, type=int)
+    parser.add_argument("--save", action='store_true')
     args = parser.parse_args()
     
     random_flag = 'random' if args.random_point else 'fixed'
@@ -169,14 +171,16 @@ def main():
     subtext_model.to(device)
     
     # Train
-    model = trainer(subtext_model, train_loader, val_loader)
+    model = trainer(subtext_model, args.epochs, train_loader, val_loader)
     
     # Save
-    random_flag = 'random' if args.random_point else 'fixed'
-    save_pth = os.path.join(args.save_path, f'subtext_model_w{args.window_size}_{random_flag}.pt')
-    torch.save(model.state_dict(), save_pth)
-    print(f"Model Saved at: {save_pth}")
-    
+    if args.save:
+        print("Saving model weights...")
+        random_flag = 'random' if args.random_point else 'fixed'
+        save_pth = os.path.join(args.save_path, f'subtext_model_w{args.window_size}_{random_flag}.pt')
+        torch.save(model.state_dict(), save_pth)
+        print(f"Model Saved at: {save_pth}")
+
     # Test
     model.eval()
     evaluate(model, test_loader)

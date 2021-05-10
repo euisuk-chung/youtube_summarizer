@@ -103,10 +103,10 @@ def evaluate_divider(testset, subtext_model, embedder, window_size):
     ws = window_size
 
     div_result = []
-    for i, a_set in enumerate(tqdm(testset)):
+    for i, a_set in enumerate(testset):
 
         if (i+1) % 20 == 0:
-            logger.info(f"working on {i+1}th doc: Accuracy so far is {acc_cnt/(acc_cnt+err_cnt)*100:.2f}%")
+            logger.info(f"working on [{i+1}/{len(testset)}]th doc: Accuracy so far is {acc_cnt/(acc_cnt+err_cnt)*100:.2f}%")
 
         src_doc = a_set[0].split('\n')
         gt = a_set[1]
@@ -179,6 +179,7 @@ def main():
     
     
     # Load test dataset
+    random.seed(1234)
     news_dataset = load_article(dataset_base_pth=args.dataset_basedir)
     testset = make_mixed_doc(news_dataset=news_dataset, max_num=args.testset_size)
     logger.info("[2/3] Testset loaded.")

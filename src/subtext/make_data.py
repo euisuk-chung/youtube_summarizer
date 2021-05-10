@@ -94,11 +94,13 @@ def save_data(args, file):
 
 class DataGenerator:
     
-    def __init__(self, max_num=50000, news_dataset=None, window_size=3, y_ratio=0.5):
+    def __init__(self, max_num=50000, news_dataset=None, window_size=3, y_ratio=0.5, random_point=False):
         
         self.df_base = news_dataset[:max_num]
         self.window_size = window_size
         self.y_ratio = y_ratio
+        self.random_point = random_point
+        logger.info(f"Generating data based on random points") if random_point else logger.info(f"Generating data based on fixed points")
         
     def make_base(self):
         
@@ -120,11 +122,12 @@ class DataGenerator:
         return train_base, val_base, test_base
 
     
-    def dataset_generator(self, base_dataset=None, y_ratio=0.5, random_point=False):
+    def dataset_generator(self, base_dataset=None, y_ratio=0.5):
         '''
         y_data: Mixed article
         n_data: Normal article
         '''
+        random_point = self.random_point
         window_size = self.window_size
         tot_len = base_dataset.__len__()
         y_len = int(tot_len * y_ratio)
@@ -135,7 +138,7 @@ class DataGenerator:
         y_dataset, n_dataset = [], []
         for i in tqdm(range(len(y_cands) - 1), desc='Sampling mixed dataset'):
             
-            if random_point:
+            if not random_point:
                 start_i = 0
                 start_j = 0
             else:
@@ -148,7 +151,7 @@ class DataGenerator:
 
         for j in tqdm(range(len(n_cands)), desc='Sampling normal dataset'):
             
-            if random_point:
+            if not random_point:
                 start_ii = 0
             else:
                 start_ii = random.randint(0, (len(n_cands[j]) - window_size*2))
