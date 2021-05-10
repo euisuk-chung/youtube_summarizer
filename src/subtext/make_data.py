@@ -18,6 +18,7 @@ from src.backbone import WindowEmbedder
 from utils.load_bertsum import bertsum
 
 
+
 def get_args(parser):
     return parser.parse_args()
 
@@ -204,6 +205,8 @@ def create_parser():
     
                     
 def main():
+    
+    global logger
     # logger
     logger = logging.getLogger(__name__)
     logging.basicConfig(format="%(asctime)s [%(levelname)s] %(message)s", 
