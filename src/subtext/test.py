@@ -186,6 +186,7 @@ def main():
     
     # Evaluate
     evaluate_divider(testset, subtext_model, bert_embedder, window_size)
+    logger.info("[3/3] Evaluation Finished.")
     
     
 if __name__=='__main__':
