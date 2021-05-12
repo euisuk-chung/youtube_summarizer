@@ -6,7 +6,12 @@ class SubtextClassifier(nn.Module):
     def __init__(self, window_size):
         super(SubtextClassifier, self).__init__()
         
-        conv_kernel_size = window_size*2-2
+        if window_size == 1:
+            conv_kernel_size = 2
+            linear_channel = 1
+        else:
+            conv_kernel_size = window_size*2-2
+            linear_channel = 3
         
         # block1
         self.block1 = nn.Sequential(
@@ -16,7 +21,7 @@ class SubtextClassifier(nn.Module):
         )
         
         self.block2 = nn.Sequential(
-            nn.Linear(128*3, 16),
+            nn.Linear(128*linear_channel, 16),
             nn.BatchNorm1d(16),
             nn.ReLU(),
             
