@@ -67,12 +67,14 @@ def get_prob(logit):
 
 class SubtextDivider:
     
-    def __init__(self, embedder=None, script_pth='', window_list=[]):
+    def __init__(self, embedder=None, script_pth='', window_list=[], threshold=0.0, mode='mean'):
         
         self.embedder = embedder
         self.script_pth = script_pth
         self.window_list = window_list
         self.script_list = self.load_youtube_script(filename=script_pth)
+        self.threshold = threshold
+        self.mode = mode
 
 
     def load_youtube_script(self, filename='KBS뉴스_7_XpWIWY6pQ_27m_51s.txt'):
@@ -127,14 +129,22 @@ class SubtextDivider:
                 emb = self.embedder.get_embeddings(w_input).transpose(1, 0).to(device)
                 score = subtext_model(emb.unsqueeze(0)).item()
                 score_list.append(score)
-
+            
             base[offset:len(base)-offset] = np.array(score_list)
             fin_scoreset.append(base)
+        
+        
+        if self.mode == 'mean':
+            mean = np.mean(np.array(fin_scoreset), axis=0)
+            mean_score = np.where(mean >= self.threshold, 1, 0)
+        else:
+            vote = np.mean(np.where(np.array(fin_scoreset) >= self.threshold, 1, 0), axis=0)
+            mean_score = np.where(vote >= 0.5, 1, 0)
 
-        return np.mean(np.array(fin_scoreset), axis=0)
+        return mean_score
 
-
-    def write_subtexts(self, output_pth='./results/tmp.txt'):
+    
+    def divide_subtexts(self, save=True, output_pth='./results/tmp.txt'):
         
         # load script
         script_list = self.script_list
@@ -142,17 +152,46 @@ class SubtextDivider:
         # load score
         div_score = self.get_mean_scores(embedder=self.embedder)
         
-        # write
-        with open(output_pth, 'w') as file:
-            i = 0
-            keep_flag = True
-            while keep_flag:
-                to_print = f"{script_list[i]}\n\n====== {div_score[i]:.2f} =====\n" if div_score[i] > 0 else f"{script_list[i]}\n{div_score[i]:.2f}"
-                file.write(to_print)
-                i += 1
-                keep_flag = False if i == len(div_score) else True
-            file.close()
+        if save:
+            # write
+            with open(output_pth, 'w') as file:
+                i = 0
+                keep_flag = True
+                while keep_flag:
+                    keep_flag = False if i == len(div_score) else True
+                    if i < len(div_score):
+                        to_print = f"{script_list[i]}\n\n  ====== SUBTEXT POINT =====\n" if div_score[i] == 1 else f"{script_list[i]}\n"
+                    else:
+                        to_print = f"{script_list[i]}\n"
+                    file.write(to_print)
+                    i += 1
+                file.close()
         return
+    
+
+#     def divide_subtexts(self, threshold=0.0, save=True, output_pth='./results/tmp.txt'):
+        
+#         # load script
+#         script_list = self.script_list
+        
+#         # load score
+#         div_score = self.get_mean_scores(embedder=self.embedder)
+        
+#         if save:
+#             # write
+#             with open(output_pth, 'w') as file:
+#                 i = 0
+#                 keep_flag = True
+#                 while keep_flag:
+#                     keep_flag = False if i == len(div_score) else True
+#                     if i < len(div_score):
+#                         to_print = f"{script_list[i]}\n\n====== {div_score[i]:.2f} =====\n" if div_score[i] >= threshold else f"{script_list[i]}\n{div_score[i]:.2f}\n"
+#                     else:
+#                         to_print = f"{script_list[i]}\n"
+#                     file.write(to_print)
+#                     i += 1
+#                 file.close()
+#         return
 
 
 
@@ -161,6 +200,9 @@ def create_parser():
     parser.add_argument("--config_path", default='./config.yml', type=str)
     parser.add_argument("--script_pth", default='KBS뉴스_7_XpWIWY6pQ_27m_51s.txt', type=str)
     parser.add_argument("--window_list", metavar='N', type=int, nargs='+', default='', help='Integers with space. ex) 1 2 3 4')
+    parser.add_argument("--mode", default='mean', help='Type to decide division points. [mean, vote]')
+    parser.add_argument("--threshold", default=0.0, type=float)
+    parser.add_argument("--save_result", action='store_true')
     parser.add_argument("--output_pth", default='./results/tmp.txt', type=str)
 
     return parser
@@ -186,11 +228,12 @@ def main():
     embedder = WindowEmbedder(model=bertsum_model, text_loader=loader)
     logger.info(f"[1/3] Bertsum model loaded.")
     
-    divider = SubtextDivider(embedder=embedder, script_pth=args.script_pth, window_list=args.window_list)
+    divider = SubtextDivider(embedder=embedder, script_pth=args.script_pth, window_list=args.window_list, threshold=args.threshold)
     logger.info(f"[2/3] Subtext dividing model loaded.")
     
     # Write result sub-texted script
-    divider.write_subtexts(output_pth=args.output_pth)
+    divider.divide_subtexts(save=args.save_result, output_pth=args.output_pth)
+    logger.info(f"Save to .txt file: {args.save_result}")
     logger.info(f"[3/3] Sub-texting Finished.")
     
     
