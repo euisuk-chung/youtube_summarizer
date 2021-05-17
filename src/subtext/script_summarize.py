@@ -198,10 +198,13 @@ class SubtextDivider:
             with open(output_pth, 'w') as file:
                 for subtext, summary in zip(div_result, summary_result):
                     
-                    subtext_print = '\n'.join(subtext)
-                    summary_print = f"    Summary: {summary}"
+                    subtext_tmp = '\n'.join(subtext)
+                    subtext_print = f"[ Original ]\n{subtext_tmp}"
                     
-                    to_print = f"{subtext_print}\n{summary_print}\n\n"
+                    summary_tmp = '\n'.join(summary[0].split('. '))
+                    summary_print = f"[ Summary ]\n{summary_tmp}"
+                    
+                    to_print = f"\n{subtext_print}\n{summary_print}\n\n\n"
                     file.write(to_print)
                 
         
