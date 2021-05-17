@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+
 class SubtextClassifier(nn.Module):
     
     def __init__(self, window_size):

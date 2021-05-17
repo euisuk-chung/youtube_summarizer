@@ -18,9 +18,10 @@ else:
 # custom
 from utils.load_bertsum import bertsum
 from utils.preprocess import doc_preprocess
-from src.backbone import WindowEmbedder
+from src.backbone import WindowEmbedder, Extractor
 from model.subtext_classifier import SubtextClassifier
 
+import IPython
 
 
 def get_args(parser):
@@ -67,8 +68,9 @@ def get_prob(logit):
 
 class SubtextDivider:
     
-    def __init__(self, embedder=None, script_pth='', window_list=[], threshold=0.0, mode='mean'):
+    def __init__(self, args=None, embedder=None, script_pth='', window_list=[], threshold=0.0, mode='mean'):
         
+        self.args = args
         self.embedder = embedder
         self.script_pth = script_pth
         self.window_list = window_list
@@ -86,10 +88,14 @@ class SubtextDivider:
         script = youtube_df['text']
         script_fin = doc_preprocess(script) # preprocess on script
 
-        script_list = [sent for sent in script_fin.split('\n') if len(sent.strip()) >= 20]#[:50]
-        
+        script_list = [sent+'.' for sent in script_fin.split('\n') if len(sent.strip()) >= 20]#[:50]
         return script_list
-
+    
+    
+    
+    # !!!TODO!!!
+    def _rule_refine():
+        pass
 
     def get_mean_scores(self, embedder=None):
         '''
@@ -144,29 +150,64 @@ class SubtextDivider:
         return mean_score
 
     
-    def divide_subtexts(self, save=True, output_pth='./results/tmp.txt'):
+    
+    def _divider(self, script_list, div_idx):
+        '''
+        Return the script list divided by division scores.
+        '''
+        div_points = div_idx + 1
+        tmp_txt = script_list.copy()
+        result_list = []
+        
+        curr_idx = 0
+        div_sub = 0
+        for i, div in enumerate(div_points):
+            curr_idx = div if i == 0 else div - div_sub
+            
+            div_lh, div_rh = tmp_txt[:curr_idx], tmp_txt[curr_idx:]
+            result_list.append(div_lh)
+
+            if i == len(div_idx)-1:
+                result_list.append(div_rh)
+
+            tmp_txt = div_rh
+            div_sub = div
+            
+        return result_list
+    
+    
+    
+    def get_subtexts(self, save=True, output_pth='./results/tmp.txt'):
         
         # load script
         script_list = self.script_list
         
         # load score
         div_score = self.get_mean_scores(embedder=self.embedder)
+        div_idx = np.ravel(np.argwhere(div_score == 1))
+        div_result = self._divider(script_list, div_idx)
+        
+        # Summarize each subtext
+        summarizer = SubtextSummarizer(args=self.args, ckpt_path=self.args.bertsum_weight, input_script=div_result)
+        summary_result = summarizer.summarize_subtexts()
+        
+        
         
         if save:
             # write
             with open(output_pth, 'w') as file:
-                i = 0
-                keep_flag = True
-                while keep_flag:
-                    keep_flag = False if i == len(div_score) else True
-                    if i < len(div_score):
-                        to_print = f"{script_list[i]}\n\n  ====== SUBTEXT POINT =====\n" if div_score[i] == 1 else f"{script_list[i]}\n"
-                    else:
-                        to_print = f"{script_list[i]}\n"
+                for subtext, summary in zip(div_result, summary_result):
+                    
+                    subtext_print = '\n'.join(subtext)
+                    summary_print = f"    Summary: {summary}"
+                    
+                    to_print = f"{subtext_print}\n{summary_print}\n\n"
                     file.write(to_print)
-                    i += 1
-                file.close()
-        return
+                
+        
+        # TODO:
+        # insert rule-based function to refine the result.
+        return div_result
     
 
 #     def divide_subtexts(self, threshold=0.0, save=True, output_pth='./results/tmp.txt'):
@@ -193,6 +234,30 @@ class SubtextDivider:
 #                 file.close()
 #         return
 
+class SubtextSummarizer:
+    '''
+    Info:
+    Arguments:
+        args
+        ckpt_path: path to the pre-trained kobertsum weights
+    '''
+    def __init__(self, args=None, ckpt_path='', input_script=[]):
+        self.args = args
+        self.ckpt_path = ckpt_path
+        self.input_script = ['\n'.join(script) for script in input_script]
+    
+    def summarize_subtexts(self):
+        # extractive summary
+        extractor = Extractor(args=self.args, use_gpu=True, checkpoint_path=self.ckpt_path)
+        
+        summary_result = []
+        for src in self.input_script:
+            summary = extractor.summarize(src, "\n")
+            summary_result.append(summary[0])
+            
+        return summary_result
+        
+
 
 
 def create_parser():
@@ -204,6 +269,7 @@ def create_parser():
     parser.add_argument("--threshold", default=0.0, type=float)
     parser.add_argument("--save_result", action='store_true')
     parser.add_argument("--output_pth", default='./results/tmp.txt', type=str)
+    parser.add_argument("--bertsum_weight", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt')
 
     return parser
 
@@ -228,13 +294,16 @@ def main():
     embedder = WindowEmbedder(model=bertsum_model, text_loader=loader)
     logger.info(f"[1/3] Bertsum model loaded.")
     
-    divider = SubtextDivider(embedder=embedder, script_pth=args.script_pth, window_list=args.window_list, threshold=args.threshold)
+    divider = SubtextDivider(args=args, embedder=embedder, script_pth=args.script_pth, window_list=args.window_list, threshold=args.threshold)
     logger.info(f"[2/3] Subtext dividing model loaded.")
     
     # Write result sub-texted script
-    divider.divide_subtexts(save=args.save_result, output_pth=args.output_pth)
+    script_list = divider.get_subtexts(save=args.save_result, output_pth=args.output_pth)
     logger.info(f"Save to .txt file: {args.save_result}")
     logger.info(f"[3/3] Sub-texting Finished.")
+    
+    # Summarize each subtext
+    
     
     
 if __name__=='__main__':

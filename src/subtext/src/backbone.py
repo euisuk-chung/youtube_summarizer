@@ -1,61 +1,57 @@
-import numpy as np
+import os
+import numpy as np 
 import math
 import torch
 import torch.nn as nn
 import sys
+
 sys.path.append('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum') #규성
 sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/bertsum') #의석
 
-from easydict import EasyDict
+from models.predictor import build_predictor
+from kobert.utils import get_tokenizer
+from models.trainer_ext import build_trainer, Trainer
 from models.neural import MultiHeadedAttention, PositionwiseFeedForward
 from models.model_builder import Bert
 from models.encoder import Classifier, PositionalEncoding, TransformerEncoderLayer, ExtTransformerEncoder
-from models.trainer_ext import Trainer
 from models.data_loader import TextLoader, load_dataset, Dataloader, get_kobert_vocab
-
-args = EasyDict({
-    "visible_gpus" : -1,
-    "temp_dir" : './tmp/',
-    "test_from": None,
-    "max_pos" : 512,
-    "large" : False,
-    "finetune_bert": True,
-    "encoder": "bert",
-    "share_emb": False,
-    "dec_layers": 6,
-    "dec_dropout": 0.2,
-    "dec_hidden_size": 768,
-    "dec_heads": 8,
-    "dec_ff_size": 2048,
-    "enc_hidden_size": 512,
-    "enc_ff_size": 512,
-    "enc_dropout": 0.2,
-    "enc_layers": 6,
-    
-    "ext_dropout": 0.2,
-    "ext_layers": 2,
-    "ext_hidden_size": 768,
-    "ext_heads": 8,
-    "ext_ff_size": 2048,
-    
-    "accum_count": 1,
-    "save_checkpoint_steps": 5,
-    
-    "generator_shard_size": 32,
-    "alpha": 0.6,
-    "beam_size": 5,
-    "min_length": 15,
-    "max_length": 150,
-    "max_tgt_len": 140,  
-    "block_trigram": True,
-    
-    "model_path": "./tmp_model/",
-    "result_path": "./tmp_result/src",
-    "recall_eval": False,
-    "report_every": 1,
-})
+import gluonnlp as nlp
 
 
+class Extractor:
+    def __init__(self, args, use_gpu, checkpoint_path):
+        args.test_from = checkpoint_path
+        os.makedirs(args.temp_dir, exist_ok=True)
+        os.makedirs(args.model_path, exist_ok=True)
+        os.makedirs(os.path.split(args.result_path)[0], exist_ok=True)
+
+        model_flags = ['hidden_size', 'ff_size', 'heads', 'inter_layers', 'encoder', 'ff_actv', 'use_interval', 'rnn_size']
+
+        args.visible_gpus = 0 if use_gpu else -1
+        device = "cpu" if args.visible_gpus == -1 else "cuda"
+        device_id = 0 if device == "cuda" else -1
+        args.world_size = 1
+        args.gpu_ranks = [0]
+        
+        checkpoint = torch.load(args.test_from, map_location=lambda storage, loc: storage)
+
+        opt = vars(checkpoint['opt'])
+        for k in opt.keys():
+            if (k in model_flags):
+                setattr(args, k, opt[k])
+
+        model = ExtSummarizer(args, device, checkpoint)
+        model.eval()
+        
+        self.predictor = build_trainer(args, device_id, model, None)
+        self.loader = TextLoader(args, device)
+    
+    def summarize(self, src, delimiter=None):
+        test_iter = self.loader.load_text(src, delimiter)
+        return self.predictor.test(test_iter, step=0, return_results=True)
+
+    
+    
 class ExtTransformerEncoder(nn.Module):
     def __init__(self, d_model, d_ff, heads, dropout, num_inter_layers=0):
         super(ExtTransformerEncoder, self).__init__()
@@ -91,7 +87,6 @@ class ExtTransformerEncoder(nn.Module):
 class ExtSummarizer(nn.Module):
     def __init__(self, args, device, checkpoint):
         super(ExtSummarizer, self).__init__()
-        self.args = args
         self.device = device
         self.bert = Bert(args.large, args.temp_dir, args.finetune_bert)
 
@@ -127,8 +122,8 @@ class ExtSummarizer(nn.Module):
         top_vec = self.bert(src, segs, mask_src)
         sents_vec = top_vec[torch.arange(top_vec.size(0)).unsqueeze(1), clss]
         sents_vec = sents_vec * mask_cls[:, :, None].float()
-        #sent_scores = self.ext_layer(sents_vec, mask_cls).squeeze(-1)
-        return sents_vec
+        sent_scores = self.ext_layer(sents_vec, mask_cls).squeeze(-1)
+        return sents_vec, sent_scores, mask_cls
     
     
 class WindowEmbedder:
@@ -144,8 +139,8 @@ class WindowEmbedder:
             segs = batch.segs
             clss = batch.clss
             mask, mask_cls = batch.mask_src, batch.mask_cls
-            result_vec = model(src, segs, clss, mask, mask_cls).detach()
-        return result_vec
+            result_vec, _, _ = model(src, segs, clss, mask, mask_cls)
+        return result_vec.detach()
     
     def get_embeddings(self, sents):
         target_doc = '\n'.join(sents)
