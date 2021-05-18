@@ -140,6 +140,8 @@ jupyter/tmp/
 src/subtext/tmp
 
 # tokenized data
-dataset/article_tokenized/*
 dataset/article_dataset/*
 dataset/pretrained_word2vec/*
+dataset/tokenized_dataset/*
+dataset/preprocessed/*
+
