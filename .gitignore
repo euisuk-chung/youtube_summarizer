@@ -145,3 +145,5 @@ dataset/pretrained_word2vec/*
 dataset/tokenized_dataset/*
 dataset/preprocessed/*
 
+# pretrained word2vec
+src/word_embedding/model/*

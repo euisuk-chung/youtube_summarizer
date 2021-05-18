@@ -6,14 +6,14 @@ import gensim
 from gensim.models import Word2Vec, KeyedVectors
 
 # load finetuned word2vec model
-w2v_path ="/repo/course/sem21_01/youtube_summarizer/dataset/pretrained_word2vec/finetuned_wv.kv"
+w2v_path ="/repo/course/sem21_01/youtube_summarizer/src/word_embedding/model/w2v_model.model"
 w2v_model = KeyedVectors.load(w2v_path)
 
 # define mecab tokenizer
 mecab = Mecab()
 
 # define stopwords
-stopwords = ['을', '를', '이', '가', '은', '는', '의', '에', '와', '으로', '합니다', '입니다']
+stopwords = ['의','은','는','이','가','좀','잘','과','도','을','를','으로','자','에','와','한','하다','합니다', '입니다','습니다']
 
 # define sentence tokenizer
 def get_sent_token(sentence, stopwords = stopwords):
