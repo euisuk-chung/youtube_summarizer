@@ -91,10 +91,10 @@ class SubtextDivider:
         youtube_df = load_json(youtube_script_pth)
 
         script = youtube_df['text']
-        script_segs = [(seg['start'], seg['end'], seg['textEdited']) for seg in youtube_df['segments'] if seg['textEdited']]
+        script_segs = [seg['words'] for seg in youtube_df['segments'] if seg['textEdited']]
         script_fin = doc_preprocess(script) # preprocess on script
-
         script_list = [sent+'.' for sent in script_fin.split('\n') if len(sent.strip()) >= 20]#[:50]
+        
         return script_list, script_segs
     
     
@@ -232,18 +232,34 @@ class SubtextDivider:
         assert self.summary_result, "No summary result has been made."
         summary_result = self.summary_result
         script_segs = self.script_segs
-        
-        query = [seg[-1].split(' ') for seg in script_segs]
-        first_summaries = [summ[0] for summ in summary_result]
 
+        words_set = [item for sublist in script_segs for item in sublist]
+        words = np.array([re.sub('([^\d])(\.)', lambda m: "{}".format(m.group(1)), aset[-1]) for aset in words_set], dtype=object)
+        
+        first_summaries = [summ[0] for summ in summary_result]
+        
         match_result = []
-        for i, key in enumerate(first_summaries):
-            scores = []
-            for query_tmp in query:
-                match_score = np.mean(np.array([1 if q in key else 0 for q in query_tmp]))
-                scores.append(match_score)
-            match_idx = np.argmax(scores)
-            match_result.append((script_segs[match_idx][0], summary_result[i]))
+        for summ_idx, summary in enumerate(first_summaries):
+            keys = summary.split(' ')
+
+            match_score = []
+            for key in keys:
+                match_list = np.where(words==key, 1, 0)
+                match_score.append(match_list)
+
+            score_list = np.max(np.array(match_score), axis=0)
+            window_size = len(keys)
+            
+            max_val, max_idx = 0, 0
+            for i in range(0, len(score_list)-window_size+1):
+                tmp_max = np.sum(score_list[i:i+window_size])
+                # update
+                if tmp_max > max_val:
+                    max_val = tmp_max
+                    max_idx = i
+            
+            match_time = words_set[max_idx][0]
+            match_result.append((match_time, summary_result[summ_idx]))
 
         # write
         with open(output_pth, 'w') as file:
