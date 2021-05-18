@@ -1,6 +1,7 @@
 import os
 import sys
 import argparse
+import re
 import numpy as np
 from tqdm import tqdm
 import time
@@ -19,7 +20,9 @@ else:
 from utils.load_bertsum import bertsum
 from utils.preprocess import doc_preprocess
 from src.backbone import WindowEmbedder, Extractor
+from src.summarize import SubtextSummarizer
 from model.subtext_classifier import SubtextClassifier
+
 
 import IPython
 
@@ -74,7 +77,9 @@ class SubtextDivider:
         self.embedder = embedder
         self.script_pth = script_pth
         self.window_list = window_list
-        self.script_list = self.load_youtube_script(filename=script_pth)
+        self.script_list, self.script_segs = self.load_youtube_script(filename=script_pth)
+        self.summary_result = None
+        
         self.threshold = threshold
         self.mode = mode
 
@@ -86,17 +91,31 @@ class SubtextDivider:
         youtube_df = load_json(youtube_script_pth)
 
         script = youtube_df['text']
+        script_segs = [(seg['start'], seg['end'], seg['textEdited']) for seg in youtube_df['segments'] if seg['textEdited']]
         script_fin = doc_preprocess(script) # preprocess on script
 
         script_list = [sent+'.' for sent in script_fin.split('\n') if len(sent.strip()) >= 20]#[:50]
-        return script_list
+        return script_list, script_segs
     
     
-    
-    # !!!TODO!!!
-    def _rule_refine():
-        pass
 
+    def _rule_refine(self, score_input, window_size):
+        '''
+        Info: 산출된 스코어 리스트를 특정 룰에 기반하여 정제하는 과정
+              window_size=3인 경우 3개 스코어를 연속으로 봤을 때, 가장 큰 값만 분리지점으로 판단
+        '''
+        score_list = score_input.copy()
+        for i in range(0, len(score_list)-window_size+1):
+            cands = np.array(score_list[i:i+window_size])
+            tmp = np.where(
+                (cands!=max(cands)) & (cands >= 0),
+                -10,
+                cands
+            )
+            score_list[i:i+window_size] = tmp
+        return score_list
+
+    
     def get_mean_scores(self, embedder=None):
         '''
         Information
@@ -138,11 +157,12 @@ class SubtextDivider:
             
             base[offset:len(base)-offset] = np.array(score_list)
             fin_scoreset.append(base)
-        
+
         
         if self.mode == 'mean':
             mean = np.mean(np.array(fin_scoreset), axis=0)
-            mean_score = np.where(mean >= self.threshold, 1, 0)
+            mean_refined = self._rule_refine(mean, 3)
+            mean_score = np.where(mean_refined >= self.threshold, 1, 0)
         else:
             vote = np.mean(np.where(np.array(fin_scoreset) >= self.threshold, 1, 0), axis=0)
             mean_score = np.where(vote >= 0.5, 1, 0)
@@ -176,7 +196,6 @@ class SubtextDivider:
         return result_list
     
     
-    
     def get_subtexts(self, save=True, output_pth='./results/tmp.txt'):
         
         # load script
@@ -190,8 +209,7 @@ class SubtextDivider:
         # Summarize each subtext
         summarizer = SubtextSummarizer(args=self.args, ckpt_path=self.args.bertsum_weight, input_script=div_result)
         summary_result = summarizer.summarize_subtexts()
-        
-        
+        self.summary_result = summary_result
         
         if save:
             # write
@@ -201,64 +219,48 @@ class SubtextDivider:
                     subtext_tmp = '\n'.join(subtext)
                     subtext_print = f"[ Original ]\n{subtext_tmp}"
                     
-                    summary_tmp = '\n'.join(summary[0].split('. '))
+                    summary_tmp = '\n'.join(summary)
                     summary_print = f"[ Summary ]\n{summary_tmp}"
                     
                     to_print = f"\n{subtext_print}\n{summary_print}\n\n\n"
                     file.write(to_print)
                 
-        
-        # TODO:
-        # insert rule-based function to refine the result.
         return div_result
     
-
-#     def divide_subtexts(self, threshold=0.0, save=True, output_pth='./results/tmp.txt'):
-        
-#         # load script
-#         script_list = self.script_list
-        
-#         # load score
-#         div_score = self.get_mean_scores(embedder=self.embedder)
-        
-#         if save:
-#             # write
-#             with open(output_pth, 'w') as file:
-#                 i = 0
-#                 keep_flag = True
-#                 while keep_flag:
-#                     keep_flag = False if i == len(div_score) else True
-#                     if i < len(div_score):
-#                         to_print = f"{script_list[i]}\n\n====== {div_score[i]:.2f} =====\n" if div_score[i] >= threshold else f"{script_list[i]}\n{div_score[i]:.2f}\n"
-#                     else:
-#                         to_print = f"{script_list[i]}\n"
-#                     file.write(to_print)
-#                     i += 1
-#                 file.close()
-#         return
-
-class SubtextSummarizer:
-    '''
-    Info:
-    Arguments:
-        args
-        ckpt_path: path to the pre-trained kobertsum weights
-    '''
-    def __init__(self, args=None, ckpt_path='', input_script=[]):
-        self.args = args
-        self.ckpt_path = ckpt_path
-        self.input_script = ['\n'.join(script) for script in input_script]
     
-    def summarize_subtexts(self):
-        # extractive summary
-        extractor = Extractor(args=self.args, use_gpu=True, checkpoint_path=self.ckpt_path)
+    def match_time(self, output_pth='./results/tmp_time.txt'):
+        assert self.summary_result, "No summary result has been made."
+        summary_result = self.summary_result
+        script_segs = self.script_segs
         
-        summary_result = []
-        for src in self.input_script:
-            summary = extractor.summarize(src, "\n")
-            summary_result.append(summary[0])
-            
-        return summary_result
+        query = [seg[-1].split(' ') for seg in script_segs]
+        first_summaries = [summ[0] for summ in summary_result]
+
+        match_result = []
+        for i, key in enumerate(first_summaries):
+            scores = []
+            for query_tmp in query:
+                match_score = np.mean(np.array([1 if q in key else 0 for q in query_tmp]))
+                scores.append(match_score)
+            match_idx = np.argmax(scores)
+            match_result.append((script_segs[match_idx][0], summary_result[i]))
+
+        # write
+        with open(output_pth, 'w') as file:
+            for mat_time, summary in match_result:
+                mat_time_sec = mat_time/1000
+                time_m, time_s = round(divmod(mat_time_sec, 60)[0]), round(divmod(mat_time_sec, 60)[1])
+                
+                # write times
+                file.write(f"\n[ Time ]: {time_m}m {time_s}s\n")
+                    
+                # write summary
+                file.write("[ Summary ]\n")
+                for summ in summary:
+                    file.write(f"{summ}\n")
+        
+        return match_result
+        
         
 
 
@@ -273,7 +275,6 @@ def create_parser():
     parser.add_argument("--save_result", action='store_true')
     parser.add_argument("--output_pth", default='./results/tmp.txt', type=str)
     parser.add_argument("--bertsum_weight", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt')
-
     return parser
 
 
@@ -295,18 +296,20 @@ def main():
     # Load bertsum model
     bertsum_model, loader = bertsum(args)
     embedder = WindowEmbedder(model=bertsum_model, text_loader=loader)
-    logger.info(f"[1/3] Bertsum model loaded.")
+    logger.info(f"[1/4] Bertsum model loaded.")
     
     divider = SubtextDivider(args=args, embedder=embedder, script_pth=args.script_pth, window_list=args.window_list, threshold=args.threshold)
-    logger.info(f"[2/3] Subtext dividing model loaded.")
+    logger.info(f"[2/4] Subtext dividing model loaded.")
     
     # Write result sub-texted script
     script_list = divider.get_subtexts(save=args.save_result, output_pth=args.output_pth)
     logger.info(f"Save to .txt file: {args.save_result}")
-    logger.info(f"[3/3] Sub-texting Finished.")
+    logger.info(f"[3/4] Finished summarizing subtexts.")
     
     # Summarize each subtext
-    
+    time_output = args.output_pth.split('.txt')[0] + '_time.txt'
+    summary_match = divider.match_time(output_pth=time_output)
+    logger.info(f"[4/4] Matching times done.")
     
     
 if __name__=='__main__':

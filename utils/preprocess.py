@@ -19,6 +19,9 @@ def doc_preprocess(src_doc):
 
     # 니다~ 인데 온점이 안붙는 경우 온점을 붙여줌 (규칙 추가 필요시 추가)
     preprop = re.sub('(니다)([^\.])', lambda m: "{}. ".format(m.group(1)), '. '.join(preprop))
+    preprop = re.sub('(거죠)([^\.])', lambda m: "{}. ".format(m.group(1)), '. '.join(preprop))
+    preprop = re.sub('(이죠)([^\.])', lambda m: "{}. ".format(m.group(1)), '. '.join(preprop))
+    preprop = re.sub('(데요)([^\.])', lambda m: "{}. ".format(m.group(1)), '. '.join(preprop))
     
     # 온점 위치 기준(. )으로 문장 split -> \n(sep-token)을 붙여 최종 문서 반환
     fin = '\n'.join(preprop.split('. '))
