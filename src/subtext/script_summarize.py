@@ -252,10 +252,10 @@ class SubtextDivider:
                 time_m, time_s = round(divmod(mat_time_sec, 60)[0]), round(divmod(mat_time_sec, 60)[1])
                 
                 # write times
-                file.write(f"\n[ Time ]: {time_m}m {time_s}s\n")
+                file.write(f"\n[Time]: {time_m}m {time_s}s\n")
                     
                 # write summary
-                file.write("[ Summary ]\n")
+                file.write("[Summary]\n")
                 for summ in summary:
                     file.write(f"{summ}\n")
         
