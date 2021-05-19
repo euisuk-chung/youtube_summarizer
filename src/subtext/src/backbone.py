@@ -15,7 +15,10 @@ from models.neural import MultiHeadedAttention, PositionwiseFeedForward
 from models.model_builder import Bert
 from models.encoder import Classifier, PositionalEncoding, TransformerEncoderLayer, ExtTransformerEncoder
 from models.data_loader import TextLoader, load_dataset, Dataloader, get_kobert_vocab
+from utils.load_sen2vec import sen2vec
 import gluonnlp as nlp
+
+
 
 
 class Extractor:
@@ -127,9 +130,10 @@ class ExtSummarizer(nn.Module):
     
     
 class WindowEmbedder:
-    def __init__(self, model=None, text_loader=None):
+    def __init__(self, model=None, text_loader=None. embed_type='bert'):
         self.text_loader = text_loader
         self.model = model
+        self.embed_type = embed_type
 
     def embedder(self, target_doc=None):
         model = self.model
@@ -141,8 +145,16 @@ class WindowEmbedder:
             mask, mask_cls = batch.mask_src, batch.mask_cls
             result_vec, _, _ = model(src, segs, clss, mask, mask_cls)
         return result_vec.detach()
+
+    def word_embedder(self, target_doc=None):
+        result_vec = [sen2vec(sent) for sent in target_doc]
+        return result_vec
     
     def get_embeddings(self, sents):
-        target_doc = '\n'.join(sents)
-        tmp_embedded = self.embedder(target_doc=target_doc)
-        return tmp_embedded.squeeze(0)
+        if embed_type == 'bert':
+            target_doc = '\n'.join(sents)
+            tmp_embedded = self.embedder(target_doc=target_doc)
+            tmp_embedded = tmp_embedded.squeeze(0)
+        elif embed_type == 'word':
+            tmp_embedded = self.word_embedder(target_doc=target_doc)
+        return tmp_embedded

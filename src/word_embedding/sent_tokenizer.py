@@ -3,11 +3,11 @@ from tqdm import tqdm
 import re
 from konlpy.tag import Mecab
 import gensim
-from gensim.models import Word2Vec, KeyedVectors
+from gensim.models import Word2Vec
 
 # load finetuned word2vec model
 w2v_path ="/repo/course/sem21_01/youtube_summarizer/src/word_embedding/model/w2v_model.model"
-w2v_model = KeyedVectors.load(w2v_path)
+w2v_model = Word2Vec.load(w2v_path)
 
 # define mecab tokenizer
 mecab = Mecab()
@@ -36,7 +36,7 @@ def get_sent_embedding(sent_token):
     w2v_list = []
 
     for token in tokens:
-        tmp_vec = w2v_model.get_vector(token)
+        tmp_vec = w2v_model.wv[token]
         w2v_list.append(tmp_vec)
         #print(len(w2v_list))
 
