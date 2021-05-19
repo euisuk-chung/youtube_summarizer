@@ -2,7 +2,7 @@ import os
 import sys
 
 # path 추가
-sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/word_embedding/model') 
+sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/word_embedding/') 
 
 from sent_tokenizer import get_sent_token, get_sent_embedding
 

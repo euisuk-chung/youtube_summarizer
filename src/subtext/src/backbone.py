@@ -17,7 +17,7 @@ from models.encoder import Classifier, PositionalEncoding, TransformerEncoderLay
 from models.data_loader import TextLoader, load_dataset, Dataloader, get_kobert_vocab
 from utils.load_sen2vec import sen2vec
 import gluonnlp as nlp
-
+import IPython
 
 
 
@@ -130,7 +130,7 @@ class ExtSummarizer(nn.Module):
     
     
 class WindowEmbedder:
-    def __init__(self, model=None, text_loader=None. embed_type='bert'):
+    def __init__(self, model=None, text_loader=None, embed_type='bert'):
         self.text_loader = text_loader
         self.model = model
         self.embed_type = embed_type
@@ -151,10 +151,12 @@ class WindowEmbedder:
         return result_vec
     
     def get_embeddings(self, sents):
+        embed_type = self.embed_type
         if embed_type == 'bert':
             target_doc = '\n'.join(sents)
             tmp_embedded = self.embedder(target_doc=target_doc)
             tmp_embedded = tmp_embedded.squeeze(0)
         elif embed_type == 'word':
-            tmp_embedded = self.word_embedder(target_doc=target_doc)
+            target_doc = sents
+            tmp_embedded = torch.tensor(self.word_embedder(target_doc=target_doc))
         return tmp_embedded
