@@ -1,7 +1,9 @@
 import os
 import sys
 # path 추가
-sys.path.append('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum')
+sys.path.append('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum') # 규성
+sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/bertsum') # 의석
+
 import torch
 
 from models.data_loader import TextLoader, load_dataset
@@ -14,7 +16,8 @@ def bertsum(configs):
     loader = TextLoader(configs, device)
 
     # model setting
-    ckpt_path = '/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt'
+    ckpt_path = '/repo/course/sem21_01/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt' #의석
+    # '/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt' #규성
     checkpoint = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
     model = ExtSummarizer(configs, device, checkpoint)
     model.eval()
