@@ -160,6 +160,7 @@ class SubtextDivider:
 
         
         if self.mode == 'mean':
+            #mean = np.array(fin_scoreset[0])*0.2 + np.array(fin_scoreset[1])*0.5 + np.array(fin_scoreset[2])*0.3
             mean = np.mean(np.array(fin_scoreset), axis=0)
             mean_refined = self._rule_refine(mean, 3)
             mean_score = np.where(mean_refined >= self.threshold, 1, 0)
