@@ -133,11 +133,12 @@ def evaluate_divider(testset, subtext_model, embedder, window_size):
 def create_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("--dataset_basedir", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset', type=str)
-    parser.add_argument("--ckpt_dir", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/subtext/ckpt', type=str)
+    parser.add_argument("--dataset_basedir", default='/repo/course/sem21_01/youtube_summarizer/dataset', type=str)
+    parser.add_argument("--ckpt_dir", default='/repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt', type=str)
     parser.add_argument("--ckpt_filename", default='subtext_model_w4.pt', type=str)
     parser.add_argument("--config_path", default='./config.yml', type=str)
     parser.add_argument("--testset_size", default=1000, type=int)
+    parser.add_argument("--embed_type", default='bert', type=str, help='[bert, word]')
 
     return parser
 
@@ -165,14 +166,15 @@ def main():
     
     
     # Load bertsum model
-    bertsum_model, loader = bertsum(args)
-    bert_embedder = WindowEmbedder(model=bertsum_model, text_loader=loader)
+    if args.embed_type == 'bert':
+        bertsum_model, loader = bertsum(args)
+        embedder = WindowEmbedder(model=bertsum_model, text_loader=loader, embed_type=args.embed_type)
+    else:
+        embedder = WindowEmbedder(model=None, text_loader=None, embed_type=args.embed_type)
 
 
     # Load subtext model and weights
     subtext_model = SubtextClassifier(window_size=window_size)
-
-    
     subtext_model.load_state_dict(torch.load(model_path))
     subtext_model.eval()
     logger.info("[1/3] Subtext model loaded.")
@@ -185,7 +187,7 @@ def main():
     logger.info("[2/3] Testset loaded.")
     
     # Evaluate
-    evaluate_divider(testset, subtext_model, bert_embedder, window_size)
+    evaluate_divider(testset, subtext_model, embedder, window_size)
     logger.info("[3/3] Evaluation Finished.")
     
     

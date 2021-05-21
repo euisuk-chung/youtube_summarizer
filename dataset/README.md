@@ -8,17 +8,28 @@ youtube_dataset: 다운로드한 유튜브 mp4 파일 및 Pororo를 사용한 �
 
 ```bash
 └── dataset
+    ├── README.md
     ├── article_dataset
-    │   └── train.jsonl
-    │   └── dev.jsonl
-    │   └── test.jsonl
+    │   ├── dev.jsonl
+    │   ├── test.jsonl
+    │   └── train.jsonl
+    ├── preprocessed
+    │   └── processed_wiki_ko.txt
     ├── subtext_dataset
-    │   └── xxx.pt
-    ├── youtube_datset
-    │   └── label
-    │   └── video
-    └── embedding
-         └── word2vec
-         └── fasttext
+    │   ├── nn_dataset_w1_fixed.pkl
+    │   ├── nn_dataset_w2_fixed.pkl
+    │   ├── nn_dataset_w2_random.pkl
+    │   ├── nn_dataset_w2v_w3_fixed.pkl
+    │   ├── nn_dataset_w3_fixed.pkl
+    │   ├── nn_dataset_w3_random.pkl
+    │   ├── nn_dataset_w4_fixed.pkl
+    │   └── nn_dataset_w4_random.pkl
+    ├── tokenized_dataset
+    │   ├── tokenized_news_data.pkl
+    │   ├── tokenized_news_data_NEW.pkl
+    │   ├── tokenized_wiki_data.pkl
+    │   └── tokenized_wiki_data_NEW.pkl
+    └── youtube_dataset
+
 
 ``` 
