@@ -12,6 +12,7 @@ import pickle
 import json
 import yaml
 import argparse
+import IPython
 #print(torch.__version__)
 
 from src.backbone import WindowEmbedder
@@ -98,7 +99,7 @@ def save_data(args, file):
         pickle.dump(file, ww)
         print(f"Saving done at: {save_path}")
         
-    return save_pth
+    return save_path
 
 
 
@@ -125,7 +126,7 @@ class DataGenerator:
         
         train_ratio = 0.7
         val_ratio = 0.3
-        
+
         train_len, val_len = int(len(self.df_base)*train_ratio), int(len(self.df_base)*val_ratio)
         test_len = len(self.df_test)
         print(f"Train_base: {train_len}, Val_base: {val_len}, Test_base: {test_len}")
