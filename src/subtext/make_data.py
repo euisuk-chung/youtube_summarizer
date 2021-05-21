@@ -35,7 +35,7 @@ def load_config(config_path='./config.yml'):
     with open(config_path) as f:
         configs = yaml.load(f, Loader=yaml.FullLoader)
     return configs
-        
+
 
 def load_jsonl(input_path) -> list:
     """
@@ -49,23 +49,32 @@ def load_jsonl(input_path) -> list:
     return data
 
 
-def load_article(dataset_base_pth=''):
-    
-    data_path = os.path.join(dataset_base_pth, 'article_dataset/train.jsonl')
-    news_df = load_jsonl(data_path)
 
-    # 전처리
-    # (1) 글자 개수가 너무 작은 경우 없애기 (30글자 이상)
-    # (2) 문장이 적은 경우 해당 기사 없애기 (10문장 이상)
-    news_clean = []
-    for news in news_df:
+def clean_news(news_dataset):
+    clean_set = []
+    for news in news_dataset:
         news_article = news['article_original']
         if len(news_article) >= 10:
             article_clean = [sent for sent in news_article]
-            news_clean.append(article_clean)
-            
-    return news_clean
-            
+            clean_set.append(article_clean)
+    return clean_set
+
+
+def load_article(dataset_base_pth='', dataset_size=50000):
+    
+    trainset_path = os.path.join(dataset_base_pth, 'article_dataset/train.jsonl')
+    devset_path = os.path.join(dataset_base_pth, 'article_dataset/dev.jsonl')
+    testset_path = os.path.join(dataset_base_pth, 'article_dataset/test.jsonl')
+    
+    news_df_train = clean_news(load_jsonl(trainset_path))
+    news_df_dev = clean_news(load_jsonl(devset_path))
+    news_df_test = clean_news(load_jsonl(testset_path))
+    
+    train_len, dev_len = int(dataset_size*0.8), int(dataset_size*0.2)
+    news_df = news_df_train[:train_len] + news_df_dev[:dev_len]
+
+    return news_df, news_df_test
+
 
 # def bertsum_model(configs):
 #     # Settings
@@ -89,15 +98,21 @@ def save_data(args, file):
         pickle.dump(file, ww)
         print(f"Saving done at: {save_path}")
         
-    return
+    return save_pth
 
 
 
 class DataGenerator:
-    
-    def __init__(self, max_num=50000, news_dataset=None, window_size=3, y_ratio=0.5, random_point=False):
+    '''
+    Information: Generate dataset for training 1d-conv model.
+    Arguments
+        max_num: Total length of dataset(articles). Dataset is generated at ratio of 8:2 for train.jsonl and dev.jsonl each
+                 example) if 50000, 40000 is from train.jsonl and 10000 is from dev.jsonl
+    '''
+    def __init__(self, news_dataset=None, news_testset=None, window_size=3, y_ratio=0.5, random_point=False):
         
-        self.df_base = news_dataset[:max_num]
+        self.df_base = news_dataset
+        self.df_test = news_testset
         self.window_size = window_size
         self.y_ratio = y_ratio
         self.random_point = random_point
@@ -109,18 +124,16 @@ class DataGenerator:
         random.shuffle(self.df_base)
         
         train_ratio = 0.7
-        val_ratio = 0.15
-        test_ratio = 0.15
+        val_ratio = 0.3
         
         train_len, val_len = int(len(self.df_base)*train_ratio), int(len(self.df_base)*val_ratio)
-        test_len = len(self.df_base) - (train_len + val_len)
+        test_len = len(self.df_test)
         print(f"Train_base: {train_len}, Val_base: {val_len}, Test_base: {test_len}")
 
         train_base = self.df_base[:train_len]
-        val_base = self.df_base[train_len:train_len+val_len]
-        test_base = self.df_base[train_len+val_len:]
+        val_base = self.df_base[train_len:]
         
-        return train_base, val_base, test_base
+        return train_base, val_base
 
     
     def dataset_generator(self, base_dataset=None, y_ratio=0.5):
@@ -165,7 +178,8 @@ class DataGenerator:
     
     def make_data(self):
         
-        train_base, val_base, test_base = self.make_base()
+        train_base, val_base = self.make_base()
+        test_base = self.df_test
         
         train_div, train_org = self.dataset_generator(base_dataset=train_base, y_ratio=self.y_ratio)
         val_div, val_org = self.dataset_generator(base_dataset=val_base, y_ratio=self.y_ratio)
@@ -200,10 +214,11 @@ def create_parser():
     parser.add_argument("--window_size", default=4, type=int)
     parser.add_argument("--dataset_size", default=50000, type=int)
     parser.add_argument("--random_point", action='store_true')
+    parser.add_argument("--embed_type", default='bert', type=str, help='[bert, word]')
 
     return parser
     
-                    
+
 def main():
     
     global logger
@@ -218,28 +233,32 @@ def main():
     
     args = parse_args(create_parser())
     logging.info(vars(args))
-    
     logging.info(f"Generate using random points: {args.random_point}")
-
-    # Load bertsum model and embedder
-    bertsum_model, loader = bertsum(args)
     
-    bertsum_model = bertsum_model
-    bert_embedder = WindowEmbedder(model=bertsum_model, text_loader=loader)
+    # Load bertsum model and embedder
+    if args.embed_type == 'bert':
+        bertsum_model, loader = bertsum(args)
+        embedder = WindowEmbedder(model=bertsum_model, text_loader=loader, embed_type=args.embed_type)
+    else:
+        embedder = WindowEmbedder(model=None, text_loader=None, embed_type=args.embed_type)
+    logger.info(f"[1/4] Embedder loaded. Using {args.embed_type} embedding")
     
     # Load article dataset
-    news_dataset = load_article(dataset_base_pth=args.dataset_basedir)
+    news_dataset, news_testset = load_article(dataset_base_pth=args.dataset_basedir, dataset_size=args.dataset_size)
+    logger.info(f"[2/4] Dataset loaded.")
     
     # Make tensor dataset used for training subtext_nn model
-    data_generator = DataGenerator(max_num=args.dataset_size,
-                                   news_dataset=news_dataset,
+    data_generator = DataGenerator(news_dataset=news_dataset,
+                                   news_testset=news_testset,
                                    window_size=args.window_size,
                                    random_point=args.random_point)
     
-    tensor_dataset = data_generator.make_tensor(embedder=bert_embedder)
+    tensor_dataset = data_generator.make_tensor(embedder=embedder)
+    logger.info(f"[3/4] Making tensors finished.")
     
     # Save tensor dataset into .pkl file at given directory
-    save_data(args, tensor_dataset)
+    save_path = save_data(args, tensor_dataset)
+    logger.info(f"[4/4] Saving done at {save_path}")
     
     
 if __name__=='__main__':

@@ -89,9 +89,9 @@ class SubtextDivider:
         assert os.path.isfile(youtube_script_pth), f"No such script file exists: {youtube_script_pth}"
 
         youtube_df = load_json(youtube_script_pth)
-
-        script = youtube_df['text']
-        script_segs = [seg['words'] for seg in youtube_df['segments'] if seg['textEdited']]
+        
+        script = ' '.join([seg['textEdited'] for seg in youtube_df['segments'] if seg['confidence'] >= self.args.confidence])
+        script_segs = [seg['words'] for seg in youtube_df['segments'] if (seg['textEdited']) and ('words' in seg.keys())]
         script_fin = doc_preprocess(script) # preprocess on script
         script_list = [sent+'.' for sent in script_fin.split('\n') if len(sent.strip()) >= 20]#[:50]
         
@@ -287,6 +287,7 @@ def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config_path", default='./config.yml', type=str)
     parser.add_argument("--script_pth", default='KBS뉴스_7_XpWIWY6pQ_27m_51s.txt', type=str)
+    parser.add_argument("--confidence", default=0.8, type=float)
     parser.add_argument("--window_list", metavar='N', type=int, nargs='+', default='', help='Integers with space. ex) 1 2 3 4')
     parser.add_argument("--mode", default='mean', help='Type to decide division points. [mean, vote]')
     parser.add_argument("--threshold", default=0.0, type=float)
@@ -319,6 +320,7 @@ def main():
         embedder = WindowEmbedder(model=bertsum_model, text_loader=loader, embed_type=args.embed_type)
     else:
         embedder = WindowEmbedder(model=None, text_loader=None, embed_type=args.embed_type)
+        
     logger.info(f"[1/4] Bertsum model loaded.")
     
     divider = SubtextDivider(args=args, embedder=embedder, script_pth=args.script_pth, window_list=args.window_list, threshold=args.threshold)

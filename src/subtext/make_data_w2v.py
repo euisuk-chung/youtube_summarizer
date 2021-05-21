@@ -231,7 +231,6 @@ def main():
 
     # # Load bertsum model and embedder
     bertsum_model, loader = bertsum(args)
-    
     embedder = WindowEmbedder(model=bertsum_model, text_loader=loader, embed_type='word')
 
     # Load article dataset
