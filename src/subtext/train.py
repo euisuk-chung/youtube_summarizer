@@ -151,16 +151,16 @@ def evaluate(input_model, test_loader):
         
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", default="/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/subtext_dataset", type=str)
+    parser.add_argument("--data_path", default="/repo/course/sem21_01/youtube_summarizer/dataset/subtext_dataset", type=str)
     parser.add_argument("--save_path", default="./ckpt")
-    parser.add_argument("--window_size", default=4, type=int)
+    parser.add_argument("--window_size", default=3, type=int)
     parser.add_argument("--random_point", action='store_true')
     parser.add_argument("--epochs", default=10, type=int)
     parser.add_argument("--save", action='store_true')
     args = parser.parse_args()
     
     random_flag = 'random' if args.random_point else 'fixed'
-    data_pth = os.path.join(args.data_path, f'nn_dataset_w{args.window_size}_{random_flag}.pkl')
+    data_pth = os.path.join(args.data_path, f'nn_dataset_w2v_w{args.window_size}_{random_flag}.pkl')
     assert os.path.isfile(data_pth), f"Dataset doesn't exists at: {data_pth}"
     
     # Load data / model

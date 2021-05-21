@@ -19,6 +19,7 @@ import argparse
 from src.backbone import WindowEmbedder
 from utils.load_bertsum import bertsum
 
+import IPython
 
 # for bertsum
 def get_args(parser):
@@ -190,7 +191,7 @@ class DataGenerator:
             tmp_emb = []
             for article in tqdm(dt, desc="working on articles"):
                 embedding = embedder.get_embeddings(article)
-                if embedding.size()[0] == window_size*2:
+                if (embedding is not None) and (embedding.size()[0] == window_size*2):
                     tmp_emb.append(embedding.unsqueeze(0))
             tmp_dt_emb = torch.cat(tmp_emb, dim=0)
             tot_embs.append(tmp_dt_emb)

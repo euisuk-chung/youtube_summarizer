@@ -158,5 +158,9 @@ class WindowEmbedder:
             tmp_embedded = tmp_embedded.squeeze(0)
         elif embed_type == 'word':
             target_doc = sents
-            tmp_embedded = torch.tensor(self.word_embedder(target_doc=target_doc))
+            try:
+                tmp_embedded = torch.tensor(self.word_embedder(target_doc=target_doc))
+            except TypeError as e:
+                print("Embedding failed. Passing")
+                return None
         return tmp_embedded
