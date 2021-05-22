@@ -6,7 +6,7 @@ import torch.nn as nn
 import sys
 
 sys.path.append('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum') #규성
-#sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/bertsum') #의석
+sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/bertsum') #의석
 
 from models.predictor import build_predictor
 from kobert.utils import get_tokenizer
@@ -15,7 +15,7 @@ from models.neural import MultiHeadedAttention, PositionwiseFeedForward
 from models.model_builder import Bert
 from models.encoder import Classifier, PositionalEncoding, TransformerEncoderLayer, ExtTransformerEncoder
 from models.data_loader import TextLoader, load_dataset, Dataloader, get_kobert_vocab
-#from utils.load_sen2vec import sen2vec
+from utils.load_sen2vec import sen2vec
 import gluonnlp as nlp
 import IPython
 
