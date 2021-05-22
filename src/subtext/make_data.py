@@ -93,8 +93,14 @@ def load_article(dataset_base_pth='', dataset_size=50000):
 
 def save_data(args, file):
     random_flag = 'random' if args.random_point else 'fixed'
-    save_path = os.path.join(args.dataset_basedir, f'subtext_dataset/nn_dataset_w{args.window_size}_{random_flag}.pkl')
     
+    if args.embed_type == 'bert':
+        save_path = os.path.join(args.dataset_basedir, f'subtext_dataset/nn_dataset_w{args.window_size}_{random_flag}.pkl')
+    elif args.embed_type == 'word':
+        save_path = os.path.join(args.dataset_basedir, f'subtext_dataset/nn_dataset_w2v_w{args.window_size}_{random_flag}.pkl')
+    else: 
+        raise ValueError('Wrong input for embed_type')
+        
     with open(save_path, 'wb') as ww:
         pickle.dump(file, ww)
         print(f"Saving done at: {save_path}")
