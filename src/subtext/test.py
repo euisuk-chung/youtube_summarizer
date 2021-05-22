@@ -59,7 +59,7 @@ def load_jsonl(input_path) -> list:
 
 def load_article(dataset_base_pth=''):
     
-    data_path = os.path.join(dataset_base_pth, 'article_dataset/train.jsonl')
+    data_path = os.path.join(dataset_base_pth, 'article_dataset/test.jsonl')
     news_df = load_jsonl(data_path)
 
     # 전처리

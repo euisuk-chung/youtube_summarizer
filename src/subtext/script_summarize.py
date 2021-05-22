@@ -9,6 +9,7 @@ import yaml
 import pickle
 import json
 import logging
+import IPython
 
 import torch
 if torch.cuda.is_available():
@@ -24,7 +25,6 @@ from src.summarize import SubtextSummarizer
 from model.subtext_classifier import SubtextClassifier
 
 
-import IPython
 
 
 def get_args(parser):
@@ -85,7 +85,7 @@ class SubtextDivider:
 
 
     def load_youtube_script(self, filename='KBS뉴스_7_XpWIWY6pQ_27m_51s.txt'):
-        youtube_script_pth = os.path.join('/repo/course/sem21_01/youtube_summarizer/dataset/youtube_dataset/label', filename)
+        youtube_script_pth = os.path.join('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/youtube_dataset/label', filename)
         assert os.path.isfile(youtube_script_pth), f"No such script file exists: {youtube_script_pth}"
 
         youtube_df = load_json(youtube_script_pth)
@@ -134,8 +134,8 @@ class SubtextDivider:
 
             # Load subtext model of window size
             subtext_model = SubtextClassifier(window_size=ws).to(device)
-            model_path = f'/repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
-            #model_path = f'/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
+            #model_path = f'/repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
+            model_path = f'/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
             subtext_model.load_state_dict(torch.load(model_path))
             subtext_model.eval()
 
@@ -293,7 +293,7 @@ def create_parser():
     parser.add_argument("--threshold", default=0.0, type=float)
     parser.add_argument("--save_result", action='store_true')
     parser.add_argument("--output_pth", default='./results/tmp.txt', type=str)
-    parser.add_argument("--bertsum_weight", default='/repo/course/sem21_01/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt')
+    parser.add_argument("--bertsum_weight", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum')
     parser.add_argument("--embed_type", default='bert', type=str, help='[bert, word]')
     return parser
 
