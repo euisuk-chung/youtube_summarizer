@@ -197,9 +197,10 @@ class DataGenerator:
         tot_embs = []
         for dt in tot_datasets:
             tmp_emb = []
+            # changed as of 21.05.22
             for article in tqdm(dt, desc="working on articles"):
                 embedding = embedder.get_embeddings(article)
-                if embedding.size()[0] == window_size*2:
+                if (embedding is not None) and (embedding.size()[0] == window_size*2):
                     tmp_emb.append(embedding.unsqueeze(0))
             tmp_dt_emb = torch.cat(tmp_emb, dim=0)
             tot_embs.append(tmp_dt_emb)
