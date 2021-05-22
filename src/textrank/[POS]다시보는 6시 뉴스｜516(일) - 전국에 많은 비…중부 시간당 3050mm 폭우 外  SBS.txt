@@ -1,0 +1,61 @@
+여러분/NNP 안녕하십니까/NNP ./SF 
+일요일 아침/NNP sbs/SL 뉴스/NNG 이/VCP ㅂ니다/EC 
+오늘/NNG 새벽/NNG 부터/JX 오전/NNP 사이/NNG 에/JKB 중부/NNP 지방/NNG 을/JKO 중심/NNG 으로/JKB 강하/VA 고/EC 많/VA 은/ETM 비/NNG 가/JKS 올/MM 것/NNB 으로/JKB 보이/VV ㅂ니다/EF ./SF 
+기상/NNP 센터/NNP 연결/NNG 하/XSV 아서/EC 자세/XR 하/XSA ㄴ/ETM 상황/NNG 알아보/VV 겠/EP 습니다/EF ./SF 
+전/MM 소영/NNP 캐스터/NNP 기상/NNP 센터/NNP 이/VCP ㅂ니다/EF ./SF 
+어제/NNG 에/JKB 이어서/MAG 오늘/NNG 도/JX 전국/NNG 에/JKB 비/NNG 가/JKS 내리/VV 고/EC 있/VX 습니다/EF ./SF 
+특히/MAG 나/JX 경기/NNP 북부/NNP 와/JC 강원/NNP 북부/NNG 를/JKO 중심/NNG 으로/JKB 는/JX 호우/NNG 주의보/NNG 가/JKS 발효/NNP 중/NNB 이/VCP ㄴ/ETM 가운데/NNG 이렇/VA 게/EC 중부/NNP 지방/NNG 을/JKO 중심/NNG 으로/JKB 세차/VA 게/EC 비/NNG 가/JKS 쏟아지/VV 는/ETM 곳/NNG 이/JKS 있/VX 습니다/EF ./SF 
+앞/NNG 으로/JKB 오늘/NNG 오전/NNG 까지/JX 이렇/VA 게/EC 수도권/NNP 과/JC 강원/NNP 남부/NNP 충청/NNP 북부/NNG 를/JKO 중심/NNG 으로/JKB 는/JX 시간/NNG 당/XSN 30/SN 에서/JKB 최고/NNG 50/SN mm/SL 의/JKG 매우/MAG 강하/VA ㄴ/ETM 비/NNG 가/JKS 쏟아지/VV ㄹ/ETM 수/NNB 있/VX 겠/EP 는데요/EF ./SF 
+비의/NNP 강도/NNG 는/JX 낮/NNG 부터/JX 점차/MAG 약하/VA 아/EC 지/VX ㄹ/ETM 것/NNB 으로/JKB 보이/VV ㅂ니다/EF ./SF 
+앞/NNG 으로/JKB 비/VV 는/ETM 내일/NNG 까지/JX 이어지/VV 겠/EP 습니다/EF ./SF 
+오늘/NNG 밤/NNG 부터/JX 서쪽/NNP 지역/NNG 부터/JX 비/NNG 가/JKS 그치/VV 기/ETN 시작/NNG 하/XSV 겠/EP 지만/EC 다시/MAG 내일/NNG 아침/NNG 부터/JX 낮/NNG 사이/NNG 에/JKB 전국/NNG 에/JKB 비/NNG 가/JKS 내리/VV ㄹ/ETM 수/NNB 있/VX 겠/EP 습니다/EF ./SF 
+예상/NNG 되/XSV 는/ETM 비의/NNP 양은/NNP 수도권/NNP 과/JC 강원/NNP 충청/NNP 북부/NNP 와/JC 경북/NNP 북부/NNG 를/JKO 중심/NNG 으로/JKB 50/SN 에서/JKB 최고/NNG 100/SN mm/SL 의/JKG 비/NNG 가/JKS 예상/NNG 되/XSV 고요/EF ./SF 
+충청/NNP 남부/NNP 와/JC 전북/NNP 영남/NNP 지역/NNG 에/JKB 10/SN 에서/JKB 최고/NNG 60/SN mm/SL 전남/NNP 과/JC 남해안/NNP 을/JKO 중심/NNG 으로/JKB 도/JX 30/SN 에서/JKB 최고/NNG 80/SN mm/SL 의/JKG 전국/NNG 적/XSN 으로/JKB 꽤/MAG 많/VA 은/ETM 양의/NNP 비/NNG 가/JKS 내리/VV 겠/EP 습니다/EF ./SF 
+특히/MAG 나/JX 비/NNG 가/JKS 오/VV 는/ETM 지역/NNG 에/JKB 는/JX 가시/NNP 거리/NNP 가/JKS 무척/MAG 짧/VA 고요/EF ./SF 
+돌풍/NNP 과/JC 함께/MAG 천둥/NNP 번개/NNP 를/JKO 동반/NNG 하/XSV 면서/EC 요란/NNG 하/XSV 게/EC 쏟아지/VV ㄹ/ETM 수/NNB 있/VV 기/ETN 때문/NNB 에/JKB 비/NNG 로/JKB 인하/VV ㄴ/ETM 피해/NNG 가/JKS 없/VA 도록/EC 계속/NNG 하/XSV 아서/EC 조심/NNG 하/XSV 아/EC 주/VX 시/EP 어야/EC 하/VX 겠/EP 습니다/EF ./SF 
+오늘/NNG 낮/NNG 기온/NNP 은/JX 서울/NNP 이/JKS 21/SN 도/NNB 에/JKB 머물/VV 겠/EP 습니다/EF ./SF 
+대전/NNP 은/JX 23/NNP 도/JX 전주/NNP 24/NNP 도/JX 대구/NNP 25/NNP 도/JX 부산/NNP 은/JX 21/NNP 도/JX 예상/NNG 되/XSV ㅂ니다/EC 
+이번/NNG 주/MM 석가/NNP 탄신일/NNG 에/JKB 는/JX 대체로/MAG 맑/VA 은/ETM 날씨/NNG 가/JKS 예상/NNG 되/XSV 지만/EC 주/MM 후반/NNP 부터/JX 충청/NNP 이/MM 남/NNP 지역/NNG 을/JKO 중심/NNG 으로/JKB 는/JX 또/MAJ 한/MM 차례/NNG 비/NNG 소식/NNG 이/JKS 들/VV 어/EC 있/VX 습니다/EF ./SF 
+지금/NNG 까지/JX 기상/NNP 센터/NNP 에서/JKB 전하/VV 아/EC 드리/VV 었/EP 습니다/EF ./SF 
+코로나/NNP 19/NNP 신규/NNG 확진/NNG 자/NNB 수/NNB 는/JX 오늘/NNG 600/SN 명/NNB 안팎/NNG 예상/NNG 되/XSV ㅂ니다/EF ./SF 
+하지만/MAJ 여전히/MAG 모임/NNG 과/JC 직장/NNP 학교/NNG 등/NNB 일상생활/NNP 곳곳/NNG 에/JKB 집단/NNG 감염/NNP 이/JKS 전국/NNG 에서/JKB 끊이/VV 지/EC 않/VX 아서/EC 불안감/NNG 이/JKS 줄어들/VV 지/EC 않/VX 고/EC 있/VX 습니다/EF ./SF 
+보도/NNG 에/JKB 장세/NNG 만/JX 기자/NNG 이/VCP ㅂ니다/EF ./SF 
+부산/NNP 의/JKG 한/MM 댄스/NNP 동호회/NNP 연습실/NNG 지나/VV ㄴ/ETM 12/SN 일/NNB 첫/MM 확진/NNG 자/NNB 가/JKS 발생/NNG 하/XSV ㄴ/ETM 데/NNB 이어/MAG 누적/NNG 41/SN 명/NNB 이/JKS 감염/NNG 되/XSV 었/EP 습니다/EF ./SF 
+동호회/NNP 회원/NNG 들/XSN 은/JX 주로/MAG 고령/NNG 층/XSN 이/JKS 대부분/NNG 으로/JKB 회원/NNG 가입/NNG 상담/NNG 과정/NNG 등/NNB 에서/JKB 일부/NNG 마스크/NNP 착용/NNG 이/JKS 미흡/XR 하/XSA 었/EP 다고/EC 방역/NNP 당국/NNG 은/JX 밝히/VV 었/EP 습니다/EF ./SF 
+현장/NNP 조사/NNP 결과/NNG 연습실/NNG 공간/NNG 은/JX 면적/NNG 이/JKS 165/SN 제곱미터/NNP 가량/NNB 으로/JKB 넓/VA 은/ETM 편/NNB 이/VCP 었/EP 으나/EC 환기/NNP 상태/NNG 가/JKS 좋/VA 지/EC 않/VX 았/EP 던/ETM 것/NNB 으로/JKB 파악/NNG 되/XSV 었/EP 습니다/EF ./SF 
+충북/NNP 음성/NNP 에선/NNP 한/MM 초등학교/NNP 와/JC 병설/NNG 유치원/NNP 에서/JKB 아동/NNP 10/SN 명/NNB 과/JKB 보육/NNP 교사/NNP 1/SN 명/NNB 등/NNB 11/SN 명/NNB 이/JKS 확진/NNG 되/XSV 었/EP 습니다/EF ./SF 
+닷새/NNG 전/MM 유치원/NNP 원/NNB 아/NNP 전원/NNG 이/JKS 함께/MAG 체험학습/NNP 을/JKO 다녀오/VV ㄴ/ETM 것/NNB 으로/JKB 확인/NNG 되/XSV ㅁ/ETN 에/JKB 따르/VV 아/EC 방역/NNP 당국/NNG 은/JX 버스/NNP 이동/NNP 과정/NNG 에서/JKB 밀접/NNG 접촉/NNG 이/JKS 있/VX 었/EP 는지/EC 조사/NNG 하/XSV 고/EC 있/VX 습니다/EF ./SF 
+경남/NNP 에선/NNP 김해/NNP 외국인/NNG 모임/NNG 관련/NNG 확진/NNG 자/NNB 가/JKS 14/SN 명/NNB 이/JKS 추가/NNG 되/XSV 는/ETM 등/NNB 그/NP 제/XSN 하루만/NNP 45/SN 명/NNB 이/JKS 감염/NNG 되/XSV 었/EP 습니다/EF ./SF 
+전국/NNG 확진/NNG 자/NNB 수/NNB 는/JX 전날/NNG 보다/JKB 66/SN 명/NNB 줄어들/VV 며/EC 사흘/NNG 만/NNB 에/JKB 600/SN 명/NNB 대로/JX 내려오/VV 았/EP 지만/EC 직장/NNG 과/JC 지인/NNP 모임/NNG 등/NNB 일상/NNP 곳곳/NNG 에서/JKB 감염/NNP 이/JKS 끊이/VV 지/EC 않/VX 으며/EC 불안/NNG 하/XSV ㄴ/ETM 모습/NNG 을/JKO 되풀이/NNG 하/XSV 고/EC 있/VX 습니다/EF ./SF 
+일평균/NNG 지역/NNG 발생/NNG 확진/NNG 자/NNB 수/NNB 도/JX 591/SN 명/NNB 으로/JKB 여전히/MAG 사회/NNG 적/XSN 거리/NNG 두기/NNP 2/SN ./SF 5/SN 단계/NNG 범위/NNG 를/JKO 벗어나/VV 지/EC 못하/VX 고/EC 있/VX 습니다/EF ./SF 
+코로나/NNP 19/NNP 예방/NNG 접종/NNG 은/JX 그/NP 제/XSN 하루/NNG 9/SN 천/NR 이/VCP 어/EC 명/NNB 이/JKS 1/SN 차/NNB 접종/NNG 을/JKO 마치/VV 어/EC 누적/NNG 접종/NNG 자/NNB 수/NNB 는/JX 373/SN 만/NNB 이/VCP 어/EC 명/NNB 으로/JKB 전체/NNG 국민/NNG 대비/NNG 7/SN ./SF 3/SN %/SW 수준/NNG 을/JKO 기록/NNG 하/XSV 았/EP 습니다/EF ./SF 
+장세/NNG 만/JX 이/VCP ㅂ니다/EC 
+밤사이/NNG 서울/NNP 강동구/NNP 의/JKG 한/MM 건물/NNG 에서/JKB 불/NNG 이/JKS 나/VV 았/EP 습니다/EF ./SF 
+크/VA ㄴ/ETM 폭발음/NNG 이/JKS 수차례/NNG 들리/VV 고/EC 지나가/VV 던/ETM 시민/NNG 들/XSN 이/JKS 대피/NNG 를/JKO 돕/VV 기/ETN 도/JX 하/VV 았/EP 습니다/EF ./SF 
+사건/NNG 사고/NNG 소식/NNG 박찬범/NNP 기자/NNG 건물/NNG 틈/NNG 사이/NNG 로/JKB 시뻘겋/VA ㄴ/ETM 불길/NNG 이/JKS 보이/VV 기/ETN 시작/NNG 하/XSV ㅂ니다/EF ./SF 
+폭발음/NNG 소리/NNG 가/JKS 곧이어/MAG 들리/VV 고/EC 시커멓/VA ㄴ/ETM 연기/NNG 가/JKS 건물/NNG 주변/NNG 을/JKO 가득/MAG 메우/VV 었/EP 습니다/EF ./SF 
+어젯밤/NNG 10/SN 시/NNB 10분/NNP 쯤/NNB 서울/NNP 강동구/NNP 천호동/NNP 의/JKG 한/MM 건물/NNG 에서/JKB 불/NNG 이/JKS 나/VV 았/EP 습니다/EF ./SF 
+불/NNG 은/JX 20/SN 분/NNB 만/NNB 에/JKB 꺼지/VV 었/EP 고/EC 인명/NNP 피해/NNG 는/JX 발생/NNG 하/XSV 지/EC 않/VX 았/EP 습니다/EF ./SF 
+소방/NNP 당국/NNG 은/JX 건물/NNG 배전반/NNG 에서/JKB 불길/NNG 이/JKS 시작/NNG 되/XSV ㄴ/ETM 것/NNB 으로/JKB 보/VV 고/EC 정확/XR 하/XSA ㄴ/ETM 화재/NNP 원인/NNG 을/JKO 조사/NNG 하/XSV 고/EC 있/VX 습니다/EF ./SF 
+아파트/NNG 단지/NNP 가/JKS 칠흑/NNG 같/VA 은/ETM 어둠/NNG 에/JKB 잠기/VV 었/EP 습니다/EF ./SF 
+어제/MAG 저녁/NNG 7/SN 시/NNB 50/SN 분/NNB 쯤/NNB 인천/NNP 부평구/NNP 삼산동/NNP 의/JKG 한/MM 아파트/NNG 단지/MAG 내/NP 정전/NNP 이/JKS 발생/NNG 하/XSV 았/EP 습니다/EF ./SF 
+1/SN 천/NR 600/SN 여/XSN 세대/NNG ./SF 전기/NNG 공급/NNG 이/JKS 9/SN 시간/NNP 가까이/MAG 중단/NNG 되/XSV 어/EC 입주민/NNG 들/XSN 이/JKS 밤새/NNG 크/VA ㄴ/ETM 불편/NNG 을/JKO 겪/VV 었/EP 습니다/EF ./SF 
+정전/NNP 은/JX 아파트/NNG 전기/NNG 설비/NNG 문제/NNG 로/JKB 발생/NNG 하/XSV ㄴ/ETM 것/NNB 으로/JKB 추정/NNG 되/XSV 고/EC 있/VX 습니다/EF ./SF 
+갓길/NNP 에/JKB 세우/VV 어/EC 지/VX ㄴ/ETM 차량/NNG 에서/JKB 연기/NNG 가/JKS 솟구치/VV 어/EC 나오/VV ㅂ니다/EF ./SF 
+경찰차/NNP 가/JKS 3/SN 개/NNB 차선/NNG 을/JKO 통제/NNG 하/XSV 고/EC 소방대원/NNG 들/XSN 이/JKS 서두르/VV 어/EC 불/NNG 을/JKO 끄/VV 기/ETN 시작/NNG 하/XSV ㅂ니다/EF ./SF 
+어제/MAG 저녁/NNG 6/SN 시/NNB 10분/NNP 쯤/NNB 북부/NNP 간선도로/NNP 구리/NNP 방향/NNG ./SF 서울/NNP 중랑구/NNP 봉화산역/NNP 인근/NNG 을/JKO 달리/VV 던/ETM 차량/NNG 에서/JKB 불/NNG 이/JKS 나/VV 았/EP 습니다/EF ./SF 운전자/NNG 는/JX 불/NNG 이/JKS 나/VV ㄴ/ETM 뒤/NNG 차량/NNG 에서/JKB 대피/NNG 하/XSV 아/EC 인명/NNP 피해/NNG 는/JX 발생/NNG 하/XSV 지/EC 않/VX 았/EP 습니다/EF ./SF 
+박찬범/NNP 이/VCP ㅂ니다/EC 
+이스라엘군/NNG 과/JC 팔레스타인/NNP 무장/NNP 정파/NNG 하마스/NNP 간/NNB 의/JKG 대/XPN 규모/NNG 무력/NNG 충돌/NNP 이/JKS 이어지/VV 는/ETM 가운데/NNG 가자지구/NNP 내/NP 외신/NNG 들/XSN 이/JKS 입주/NNG 하/XSV ㄴ/ETM 건물/NNG 이/JKS 이스라엘군/NNG 의/JKG 공습/NNP 으로/JKB 붕괴/NNG 되/XSV 었/EP 습니다/EF ./SF 
+조 바이든/NNP 미/NNP 대통령/NNG 은/JX 양측/NNG 정상/NNG 과/JC 각각/MAG 통화/NNG 하/XSV 았/EP 습니다/EF ./SF 
+보도/NNG 에/JKB 안세현/NNP 시뻘겋/VA ㄴ/ETM 화염/NNG 이/JKS 치솟/VV 더니/EC 거대/XR 하/XSA ㄴ/ETM 먼지/NNP 구름/NNP 을/JKO 일으키/VV 며/EC 건물/NNG 이/JKS 무너지/VV 어/EC 내리/VV ㅂ니다/EF ./SF 
+현지/NNG 시간/NNG 으로/JKB 어제/MAG AP/SL 통신/NNP 과/JC 카타르/NNP ./SF 국영/NNG 방송/NNP 알자지라/NNP 등/NNB 외신/NNG 언론사/NNG 들/XSN 이/JKS 입주/NNG 하/XSV ㄴ/ETM 가자지구/NNP 내/NP 12/SN 층/NNG 짜리/XSN 건물/NNG 이/JKS 이스라엘군/NNG 의/JKG 공습/NNP 으로/JKB 파괴/NNG 되/XSV 었/EP 습니다/EF ./SF 
+앞서/MAG 이스라엘군/NNG 은/JX 해당/NNG 건물/NNG 이/JKS 공습/NNP 의/JKG 표적/NNP 이/JKS 되/VV ㄹ/ETM 수/NNB 있/VV 으니/EC 한/MM 시간/NNG 안/NNG 에/JKB 모두/MAG 대피/NNG 하/XSV 라고/EC 경고/NNG 하/XSV 았/EP 습니다/EF ./SF 
+똑같이/MAG 먹/VV 고/EC 가/VV 니까/EC 내/NP 가/JKS 되/VV 겠/EP 네요/EC 
+이스라엘군/NNG 은/JX 공습/NNP 이유/NNG 에/JKB 대하/VV 아/EC 해당/NNG 건물/NNG 이/JKS 하마스/NNP 에/JKB 의하/VV 아/EC 군사/NNG 적/XSN 으로/JKB 사용/NNG 되/XSV 고/EC 있/VV 다고/EC 주장/NNG 하/XSV 았/EP 습니다/EF ./SF 
+ap/SL 통신/NNP 은/JX 이번/NNG 폭격/NNG 이/JKS 가자지구/NNP 에/JKB 대하/VV ㄴ/ETM 언론/NNG 보도/NNG 를/JKO 막/VV 으려는/ETM 조치/NNG 이/VCP 라며/EC 강하/VA 게/EC 비판/NNG 하/XSV 았/EP 습니다/EF ./SF 
+조/NR 바이든/NNP 미국/NNP 대통령/NNG 도/JX 이스라엘/NNP 과/JC 팔레스타인/NNP 정상/NNG 과/JC 각각/MAG 통화/NNG 하/XSV 고/EC 양측/NNG 의/JKG 무력/NNG 충돌/NNP 해결/NNG ./SF 노력/NNG 을/JKO 촉구/NNG 하/XSV 는/ETM 한편/NNG 언론/NNG 의/JKG 안전/NNG 을/JKO 보장/NNG 하/XSV ㄹ/ETM 필요/NNG 성/XSN 도/JX 강조/NNG 하/XSV 았/EP 습니다/EF ./SF 
+팔레스타인/NNP 자치/NNG 정부/NNG 수반/NNG 과/JKB 의/JKG 통화/NNG 는/JX 지나/VV ㄴ/ETM 1월/NNP 바이든/NNP 대통령/NNG 취임/NNG 이후/NNG 처음/NNG 이/VCP ㅂ니다/EF ./SF 
+지나/VV ㄴ/ETM 10/SN 일/NNB 부터/JX 이스라엘군/NNG 과/JC 가자지구/NNP 무장/NNP 정파/NNG 하마스/NNP 사이/NNG 의/JKG 대/XPN 규모/NNG 무력/NNG 충돌/NNG 이/JKS 이어지/VV 고/EC 있/VV 는/ETM 가운데/NNG 현재/NNG 까지/JX 알리/VV 어/EC 지/VX ㄴ/ETM 가자지구/NNP 사망자/NNG 는/JX 140/SN 명/NNB 에/JKB 달하/VV 고/EC 하마스/NNP 의/JKG 로켓/NNP 공격/NNG 으로/JKB 인하/VV ㄴ/ETM 이스라엘/NNP 사망자/NNG 수/NNB 도/JX 9/SN 명/NNB 으로/JKB 보고/NNG 되/XSV 었/EP 습니다/EF ./SF 
+유엔/NNP 안전/NNG 보장/NNG 이사회/NNP 는/JX 오늘/NNG 무력/NNG 분쟁/NNG 해소/NNG 방안/NNG 을/JKO 논의/NNG 하/XSV 기/ETN 위하/VV 아/EC 화상/NNP 회의/NNP 를/JKO 가지/VV ㄹ/ETM 예정/NNG 이/VCP ㅂ니다/EF ./SF 
+sbs/SL 뉴스/NNP 안서현/NNP 이/VCP ㅂ니다/EC 
+sbs/SL 뉴스/NNP 마치/VV ㅂ니다/EF ./SF 고맙/VA 습니다/EF ./SF 
