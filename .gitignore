@@ -136,8 +136,10 @@ dataset/*/*.pkl
 dataset/youtube_dataset/video/*.mp4
 
 # tmp file
-jupyter/tmp/
-src/subtext/tmp
+jupyter/tmp/*
+src/subtext/tmp/*
+src/subtext/tmp_model/*
+
 
 # tokenized data
 dataset/article_dataset/*

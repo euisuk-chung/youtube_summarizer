@@ -85,7 +85,8 @@ class SubtextDivider:
 
 
     def load_youtube_script(self, filename='KBS뉴스_7_XpWIWY6pQ_27m_51s.txt'):
-        youtube_script_pth = os.path.join('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/youtube_dataset/label', filename)
+        youtube_script_pth = os.path.join('/repo/course/sem21_01/youtube_summarizer/dataset/youtube_dataset/json', filename)
+     #os.path.join('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/youtube_dataset/label', filename)
         assert os.path.isfile(youtube_script_pth), f"No such script file exists: {youtube_script_pth}"
 
         youtube_df = load_json(youtube_script_pth)
@@ -286,6 +287,7 @@ class SubtextDivider:
 
 def create_parser():
     parser = argparse.ArgumentParser()
+    
     parser.add_argument("--config_path", default='./config.yml', type=str)
     parser.add_argument("--script_pth", default='KBS뉴스_7_XpWIWY6pQ_27m_51s.txt', type=str)
     parser.add_argument("--confidence", default=0.8, type=float)
@@ -294,9 +296,10 @@ def create_parser():
     parser.add_argument("--threshold", default=0.0, type=float)
     parser.add_argument("--save_result", action='store_true')
     parser.add_argument("--output_pth", default='./results/tmp.txt', type=str)
-    parser.add_argument("--bertsum_weight", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum')
-    #repo/course/sem21_01/youtube_summarizer/src/bertsum
-    parser.add_argument("--embed_type", default='bert', type=str, help='[bert, word]')
+    parser.add_argument("--bertsum_weight", default='/repo/course/sem21_01/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt', type=str)                     #default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum', type=str)
+    parser.add_argument("--embed_type", default='word', help='[bert, word]', type=str)
+    #parser.add_argument("--embed_type", default='bert', help='[bert, word]', type=str)
+
     return parser
 
 
@@ -315,7 +318,6 @@ def main():
     logging.info(vars(args))
     
     
-    # Load bertsum model
     # Load bertsum model
     if args.embed_type == 'bert':
         bertsum_model, loader = bertsum(args)
