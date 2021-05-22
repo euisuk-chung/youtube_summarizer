@@ -2,7 +2,7 @@ import os
 import sys
 # path 추가
 sys.path.append('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum') # 규성
-#sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/bertsum') # 의석
+sys.path.append('/repo/course/sem21_01/youtube_summarizer/src/bertsum') # 의석
 
 import torch
 

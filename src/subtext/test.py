@@ -135,7 +135,7 @@ def create_parser():
     
     parser.add_argument("--dataset_basedir", default='/repo/course/sem21_01/youtube_summarizer/dataset', type=str)
     parser.add_argument("--ckpt_dir", default='/repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt', type=str)
-    parser.add_argument("--ckpt_filename", default='subtext_model_w4.pt', type=str)
+    parser.add_argument("--ckpt_filename", default='subtext_model_w1_fixed.pt', type=str)
     parser.add_argument("--config_path", default='./config.yml', type=str)
     parser.add_argument("--testset_size", default=1000, type=int)
     parser.add_argument("--embed_type", default='bert', type=str, help='[bert, word]')

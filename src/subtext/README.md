@@ -14,8 +14,8 @@ Arguments
     명시하지 않는 경우(False) \
     기사의 [첫번째(0) ~ window_size]를 샘플링 명시하는 경우(True) 기사의 위치 중 랜덤하게 선택하여 window_size 만큼 샘플링
     6. embed_type: 어떤 embedding값을 사용할 것인가 (default : bert)\
-    bert : Kobert Embedding\
-    word : FastText Embedding
+    - bert : Kobert Embedding\
+    - word : FastText Embedding
 '''
 python make_data.py \
     --dataset_basedir {} \
@@ -30,16 +30,45 @@ python make_data.py \
 ```bash
 '''
 Arguments
-    1. data_path: 학습을 위한 텐서 리스트 위치 (default: path/to/your/repository/dataset/subtext_dataset)
+    1. data_path: 학습을 위한 텐서 리스트 위치\
+    (default: path/to/your/repository/dataset/subtext_dataset)
     2. save_path: 모델 저장 위치 (default: ./ckpt/)
     3. window_size: 윈도우 크기 (default: 4)
-    4. random_point: 이용하는 데이터가 랜덤 포인트로 생성이 되었는지 여부
-                  명시하지 않을 경우 False
-                  명시하지 할 경우 True
+    4. random_point: 이용하는 데이터가 랜덤 포인트로 생성이 되었는지 여부\
+    - 명시하지 않을 경우 False\
+    - 명시하지 할 경우 True
+    5. save : 저장을 원할때
 '''
+
 python train.py \
     --data_path {} \
     --save_path {} \
     --window_size {} \
     --random_point
+    --save
+```
+
+### (3) 테스트
+```bash
+'''
+Arguments
+    1. dataset_basedir: 학습을 위한 텐서 리스트 위치\
+    (default: /repo/course/sem21_01/youtube_summarizer/dataset)
+    2. ckpt_dir: 저장된 모델의 위치 \
+    (default: /repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt)
+    3. ckpt_filename: 저장된 모델의 이름\
+    (default: subtext_model_w1_fixed.pt)
+    4. config_path: config 저장 위치\
+    (default: ./config.yml)
+    5. testset_size : test data size(1000)
+    6. embed_type: 어떤 embedding값을 사용할 것인가 (default : bert)\
+    - bert : Kobert Embedding\
+    - word : FastText Embedding
+'''
+
+python test.py \
+    --dataset_basedir {} \
+    --ckpt_dir {} \
+    --ckpt_filename {} \
+    --embed_type {}
 ```

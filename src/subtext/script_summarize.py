@@ -134,8 +134,9 @@ class SubtextDivider:
 
             # Load subtext model of window size
             subtext_model = SubtextClassifier(window_size=ws).to(device)
-            #model_path = f'/repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
-            model_path = f'/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
+            model_path = f'/repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
+            #model_path = f'/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
+            
             subtext_model.load_state_dict(torch.load(model_path))
             subtext_model.eval()
 
@@ -294,6 +295,7 @@ def create_parser():
     parser.add_argument("--save_result", action='store_true')
     parser.add_argument("--output_pth", default='./results/tmp.txt', type=str)
     parser.add_argument("--bertsum_weight", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum')
+    #repo/course/sem21_01/youtube_summarizer/src/bertsum
     parser.add_argument("--embed_type", default='bert', type=str, help='[bert, word]')
     return parser
 

@@ -218,6 +218,7 @@ def create_parser():
     parser = argparse.ArgumentParser()
     
     parser.add_argument("--dataset_basedir", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset', type=str)
+    #/repo/course/sem21_01/youtube_summarizer/dataset
     parser.add_argument("--config_path", default='./config.yml', type=str)
     parser.add_argument("--window_size", default=4, type=int)
     parser.add_argument("--dataset_size", default=50000, type=int)
