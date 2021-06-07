@@ -252,7 +252,7 @@ class Trainer(object):
                                     for i in range(batch.batch_size)
                                 ]
                             else:
-                                sent_scores, mask = self.model(src, segs, clss, mask, mask_cls)
+                                _, sent_scores, mask = self.model(src, segs, clss, mask, mask_cls)
 
                                 if not return_results:
                                     loss = self.loss(sent_scores, labels.float())

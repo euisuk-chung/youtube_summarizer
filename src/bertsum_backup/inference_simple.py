@@ -50,40 +50,6 @@ args = EasyDict({
     "report_every": 1,
 })
 
-class Generator:
-    def __init__(self, use_gpu, checkpoint_path):
-        args.test_from = checkpoint_path
-        os.makedirs(args.temp_dir, exist_ok=True)
-        os.makedirs(args.model_path, exist_ok=True)
-        os.makedirs(os.path.split(args.result_path)[0], exist_ok=True)
-
-        model_flags = ['hidden_size', 'ff_size', 'heads', 'emb_size', 'enc_layers', 'enc_hidden_size', 'enc_ff_size',
-               'dec_layers', 'dec_hidden_size', 'dec_ff_size', 'encoder', 'ff_actv', 'use_interval']
-
-        args.visible_gpus = 0 if use_gpu else -1
-        device = "cpu" if args.visible_gpus == -1 else "cuda"
-        checkpoint = torch.load(args.test_from, map_location=lambda storage, loc: storage)
-
-        opt = vars(checkpoint['opt'])
-        for k in opt.keys():
-            if (k in model_flags):
-                setattr(args, k, opt[k])
-
-        model = AbsSummarizer(args, device, checkpoint)
-        model.eval()
-
-        vocab = get_kobert_vocab(cachedir=args.temp_dir)
-        #tokenizer = nlp.data.BERTSPTokenizer(get_tokenizer(), vocab, lower=False)
-        symbols = {'BOS': vocab.token_to_idx['[BOS]'], 'EOS': vocab.token_to_idx['[EOS]'],
-                'PAD': vocab.token_to_idx['[PAD]'], 'EOQ': vocab.token_to_idx['[EOS]']}
-        self.predictor = build_predictor(args, vocab, symbols, model)
-        self.loader = TextLoader(args, device)
-    
-    def summarize(self, src, num_beams=5):
-        self.loader.args.num_beams = num_beams
-        test_iter = self.loader.load_text(src)
-        return self.predictor.translate(test_iter, step=-1, return_results=True)
-
 class Extractor:
     def __init__(self, use_gpu, checkpoint_path):
         args.test_from = checkpoint_path

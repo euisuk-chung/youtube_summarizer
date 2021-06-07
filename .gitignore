@@ -130,6 +130,8 @@ dmypy.json
 
 # Dataset Directory / checkpoint
 src/bertsum/checkpoint/*.pt
+src/bertsum_backup/checkpoint/*.pt
+
 src/subtext/ckpt/*.pt
 dataset/*/*.jsonl
 dataset/*/*.pkl
