@@ -1,4 +1,4 @@
-from src.backbone import WindowEmbedder, Extractor
+from src.backbone import WindowEmbedder, Generator, Extractor
 
 
 class SubtextSummarizer:
@@ -13,19 +13,21 @@ class SubtextSummarizer:
         self.ckpt_path = ckpt_path
         self.input_script = ['\n'.join(script) for script in input_script]
     
-    
     def summarize_subtexts(self):
         # extractive summary
-        extractor = Extractor(args=self.args, use_gpu=True, checkpoint_path=self.ckpt_path)
-        
+        if self.args.summarizer_type == 'ext':
+            summarizer = Extractor(args=self.args, use_gpu=True, checkpoint_path=self.ckpt_path)
+        else:
+            summarizer = Generator(args=self.args, use_gpu=True, checkpoint_path=self.ckpt_path)
+
         summary_result = []
         for src in self.input_script:
-            summary = extractor.summarize(src, "\n")
-            summary_refined = self._sort_summary(summary)
-            summary_result.append(summary_refined)
+            summary = summarizer.summarize(src, "\n")
+            if self.args.summarizer_type == 'ext':
+                summary = self._sort_summary(summary)
+            summary_result.append(summary)
             
         return summary_result
-    
     
     def _sort_summary(self, summary_input):
         '''

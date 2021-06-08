@@ -85,7 +85,7 @@ class SubtextDivider:
 
 
     def load_youtube_script(self, filename='KBS뉴스_7_XpWIWY6pQ_27m_51s.txt'):
-        youtube_script_pth = os.path.join('/repo/course/sem21_01/youtube_summarizer/dataset/youtube_dataset/json', filename)
+        youtube_script_pth = os.path.join('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/youtube_dataset/label', filename)
      #os.path.join('/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/dataset/youtube_dataset/label', filename)
         assert os.path.isfile(youtube_script_pth), f"No such script file exists: {youtube_script_pth}"
 
@@ -135,8 +135,8 @@ class SubtextDivider:
 
             # Load subtext model of window size
             subtext_model = SubtextClassifier(window_size=ws).to(device)
-            model_path = f'/repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
-            #model_path = f'/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
+            #model_path = f'/repo/course/sem21_01/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
+            model_path = f'/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/subtext/ckpt/subtext_model_w{ws}_fixed.pt'
             
             subtext_model.load_state_dict(torch.load(model_path))
             subtext_model.eval()
@@ -281,8 +281,6 @@ class SubtextDivider:
         
         return match_result
         
-        
-
 
 
 def create_parser():
@@ -296,8 +294,9 @@ def create_parser():
     parser.add_argument("--threshold", default=0.0, type=float)
     parser.add_argument("--save_result", action='store_true')
     parser.add_argument("--output_pth", default='./results/tmp.txt', type=str)
-    parser.add_argument("--bertsum_weight", default='/repo/course/sem21_01/youtube_summarizer/src/bertsum/checkpoint/model_step_24000.pt', type=str)                     #default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum', type=str)
-    parser.add_argument("--embed_type", default='word', help='[bert, word]', type=str)
+    parser.add_argument("--bertsum_weight", default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum/checkpoint', type=str)                     #default='/home/sks/korea_univ/21_1/TA/team_project/youtube_summarizer/src/bertsum', type=str)
+    parser.add_argument("--embed_type", default='bert', help='[bert, word]', type=str)
+    parser.add_argument("--summarizer_type", default='ext', help='[ext, abs]', type=str)
     #parser.add_argument("--embed_type", default='bert', help='[bert, word]', type=str)
 
     return parser
@@ -330,15 +329,21 @@ def main():
     divider = SubtextDivider(args=args, embedder=embedder, script_pth=args.script_pth, window_list=args.window_list, threshold=args.threshold)
     logger.info(f"[2/4] Subtext dividing model loaded.")
     
+    # Summarizer Type
+    if args.summarizer_type == 'ext':
+        args.bertsum_weight = os.path.join(args.bertsum_weight, 'model_step_24000.pt')
+    elif args.summarizer_type == 'abs':
+        args.bertsum_weight = os.path.join(args.bertsum_weight, 'model_step_130000.pt')
+    
     # Write result sub-texted script
     script_list = divider.get_subtexts(save=args.save_result, output_pth=args.output_pth)
     logger.info(f"Save to .txt file: {args.save_result}")
     logger.info(f"[3/4] Finished summarizing subtexts.")
     
     # Summarize each subtext
-    time_output = args.output_pth.split('.txt')[0] + '_time.txt'
-    summary_match = divider.match_time(output_pth=time_output)
-    logger.info(f"[4/4] Matching times done.")
+#     time_output = args.output_pth.split('.txt')[0] + '_time.txt'
+#     summary_match = divider.match_time(output_pth=time_output)
+#     logger.info(f"[4/4] Matching times done.")
     
     
 if __name__=='__main__':
