@@ -142,6 +142,8 @@ jupyter/tmp/*
 src/subtext/tmp/*
 src/subtext/tmp_model/*
 
+# Results
+src/subtext/results/*
 
 # tokenized data
 dataset/article_dataset/*
