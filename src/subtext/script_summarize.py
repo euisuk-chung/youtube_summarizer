@@ -78,6 +78,8 @@ class SubtextDivider:
         self.script_pth = script_pth
         self.window_list = window_list
         self.script_list, self.script_segs = self.load_youtube_script(filename=script_pth)
+        
+        self.div_result = None
         self.summary_result = None
         
         self.threshold = threshold
@@ -200,7 +202,7 @@ class SubtextDivider:
         return result_list
     
     
-    def get_subtexts(self, save=True, output_pth='./results/tmp.txt'):
+    def summarize_subtexts(self, save=True, output_pth='./results/tmp.txt'):
         
         # load script
         script_list = self.script_list
@@ -209,6 +211,7 @@ class SubtextDivider:
         div_score = self.get_mean_scores(embedder=self.embedder)
         div_idx = np.ravel(np.argwhere(div_score == 1))
         div_result = self._divider(script_list, div_idx)
+        self.div_result = div_result
         
         # Summarize each subtext
         summarizer = SubtextSummarizer(args=self.args, ckpt_path=self.args.bertsum_weight, input_script=div_result)
@@ -233,18 +236,19 @@ class SubtextDivider:
     
     
     def match_time(self, output_pth='./results/tmp_time.txt'):
-        assert self.summary_result, "No summary result has been made."
+        assert self.div_result, "No div result was made."
+        div_result = self.div_result
         summary_result = self.summary_result
         script_segs = self.script_segs
 
         words_set = [item for sublist in script_segs for item in sublist]
         words = np.array([re.sub('([^\d])(\.)', lambda m: "{}".format(m.group(1)), aset[-1]) for aset in words_set], dtype=object)
         
-        first_summaries = [summ[0] for summ in summary_result]
+        first_sents = [sents[0] for sents in div_result]
         
         match_result = []
-        for summ_idx, summary in enumerate(first_summaries):
-            keys = summary.split(' ')
+        for div_idx, sent in enumerate(first_sents):
+            keys = sent.split(' ')
 
             match_score = []
             for key in keys:
@@ -263,7 +267,7 @@ class SubtextDivider:
                     max_idx = i
             
             match_time = words_set[max_idx][0]
-            match_result.append((match_time, summary_result[summ_idx]))
+            match_result.append((match_time, summary_result[div_idx]))
 
         # write
         with open(output_pth, 'w') as file:
@@ -336,14 +340,14 @@ def main():
         args.bertsum_weight = os.path.join(args.bertsum_weight, 'model_step_130000.pt')
     
     # Write result sub-texted script
-    script_list = divider.get_subtexts(save=args.save_result, output_pth=args.output_pth)
+    script_list = divider.summarize_subtexts(save=args.save_result, output_pth=args.output_pth)
     logger.info(f"Save to .txt file: {args.save_result}")
     logger.info(f"[3/4] Finished summarizing subtexts.")
     
     # Summarize each subtext
-#     time_output = args.output_pth.split('.txt')[0] + '_time.txt'
-#     summary_match = divider.match_time(output_pth=time_output)
-#     logger.info(f"[4/4] Matching times done.")
+    time_output = args.output_pth.split('.txt')[0] + '_time.txt'
+    summary_match = divider.match_time(output_pth=time_output)
+    logger.info(f"[4/4] Matching times done.")
     
     
 if __name__=='__main__':
